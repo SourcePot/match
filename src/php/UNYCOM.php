@@ -101,7 +101,7 @@ final class UNYCOM{
     private function parseCase(string $case):array
     {
         $unycom=['String'=>$case,'isValid'=>FALSE,'Year'=>'    ','Type'=>' ','Number'=>'     ','Region'=>'  ','Country'=>'  ','Part'=>'  '];
-        $case=' '.$case.' ';
+        $case=' '.strtoupper($case).' ';
         // get case number
         preg_match('/[^0-9]([0-9]{5})[^0-9]/',$case,$match);
         if (!isset($match[1])){return $unycom;}

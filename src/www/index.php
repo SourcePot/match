@@ -16,8 +16,8 @@ mb_internal_encoding("UTF-8");
 require_once('../php/MatchValues.php');
 $matchObj = new MatchValues();
 
-$valueA=$_POST['valueA']??'';
-$valueB=$_POST['valueB']??'';
+$valueA=$_POST['valueA']??'HHI 2 - 98P42746WOvn04';
+$valueB=$_POST['valueB']??'HHI 2 - 1998P42746WO04';
 $matchtype=$_POST['matchtype']??'';
 // compile html
 $html='<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta charset="utf-8"><title>Match</title><link type="text/css" rel="stylesheet" href="index.css"/></head>';
@@ -38,22 +38,18 @@ $html.='</div>';
 $html.='</form>';
 
 require_once('../php/UNYCOM.php');
-$unycomObj=new UNYCOM('IIS1 - 98P62746WE04');
-var_dump($unycomObj->getArray());
-
+$unycomObj=new UNYCOM($valueA);
 
 // print asset
-/*
 $html.='<table>';
-$html.='<caption>Asset instance ['.$unit.']</caption>';
-foreach($asset->getArray() as $key=>$value){
+$html.='<caption>UNYCOM case parser test</caption>';
+foreach($unycomObj->getArray() as $key=>$value){
     if (is_object($value)){
         $value=$value->format('Y-m-d');
     }
     $html.='<tr><td>'.$key.'</td><td>'.$value.'</td></tr>';
 }
 $html.='</table>';
-*/
 
 $html.='<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>';
 $html.='<script src="index.js"></script>';
