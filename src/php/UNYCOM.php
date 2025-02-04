@@ -17,9 +17,9 @@ final class UNYCOM{
                                   'BX'=>'BENELUX OFFICE FOR INTELLECTUAL PROPERTY (BOIP)',
                                   'QZ'=>'COMMUNITY PLANT VARIETY OFFICE (EUROPEAN UNION) (CPVO)',
                                   'EA'=>'EURASIAN PATENT ORGANIZATION (EAPO)',
-                                  'EU'=>'EUROPEAN UNION',
                                   'EM'=>'EUROPEAN UNION INTELLECTUAL PROPERTY OFFICE (EUIPO)',
                                   'EP'=>'EUROPEAN PATENT OFFICE (EPO)',
+                                  'WE'=>'EURO PCT',
                                   'WO'=>'INTERNATIONAL BUREAU OF THE WORLD INTELLECTUAL PROPERTY ORGANIZATION (WIPO)',
                                   'GC'=>'PATENT OFFICE OF THE COOPERATION COUNCIL FOR THE ARAB STATES OF THE GULF (GCC PATENT OFFICE)',
                                   'IB'=>'WORLD INTELLECTUAL PROPERTY ORGANIZATION (WIPO) (INTERNATIONAL BUREAU OF)',
@@ -36,7 +36,7 @@ final class UNYCOM{
                                  'TD'=>'CHAD','CL'=>'CHILE','CN'=>'CHINA','CO'=>'COLOMBIA','KM'=>'COMOROS','CG'=>'CONGO','CK'=>'COOK ISLANDS','CR'=>'COSTA RICA',
                                  'CI'=>'CÔTE D\'IVOIRE','HR'=>'CROATIA','CU'=>'CUBA','CW'=>'CURAÇAO','CY'=>'CYPRUS','CZ'=>'CZECHIA','KP'=>'DEMOCRATIC PEOPLE\'S REPUBLIC OF KOREA',
                                  'CD'=>'DEMOCRATIC REPUBLIC OF THE CONGO','DK'=>'DENMARK','DJ'=>'DJIBOUTI','DM'=>'DOMINICA','DO'=>'DOMINICAN REPUBLIC','EC'=>'ECUADOR',
-                                 'EG'=>'EGYPT','SV'=>'EL SALVADOR','GQ'=>'EQUATORIAL GUINEA','ER'=>'ERITREA','EE'=>'ESTONIA','SZ'=>'ESWATINI','ET'=>'ETHIOPIA',
+                                 'EG'=>'EGYPT','EU'=>'EUROPEAN UNION','SV'=>'EL SALVADOR','GQ'=>'EQUATORIAL GUINEA','ER'=>'ERITREA','EE'=>'ESTONIA','SZ'=>'ESWATINI','ET'=>'ETHIOPIA',
                                  'FK'=>'FALKLAND ISLANDS (MALVINAS)','FO'=>'FAROE ISLANDS','FJ'=>'FIJI','FI'=>'FINLAND','FR'=>'FRANCE','GA'=>'GABON','GM'=>'GAMBIA',
                                  'GE'=>'GEORGIA','DE'=>'GERMANY','GH'=>'GHANA','GI'=>'GIBRALTAR','GR'=>'GREECE','GL'=>'GREENLAND','GD'=>'GRENADA','GT'=>'GUATEMALA',
                                  'GG'=>'GUERNSEY','GN'=>'GUINEA','GW'=>'GUINEA-BISSAU','GY'=>'GUYANA','HT'=>'HAITI','VA'=>'HOLY SEE',''=>'HONDURAS',''=>'HONG KONG, CHINA',
@@ -61,10 +61,13 @@ final class UNYCOM{
                                  'UZ'=>'UZBEKISTAN','VU'=>'VANUATU','VE'=>'VENEZUELA (BOLIVARIAN REPUBLIC OF)','VN'=>'VIET NAM','EH'=>'WESTERN SAHARA','YE'=>'YEMEN',
                                  'ZM'=>'ZAMBIA','ZW'=>'ZIMBABWE',];
     
+    private const CASE_TYPE=['XF'=>'Third party patent family','MF'=>'Tradmark family','E'=>'Invention','F'=>'Patent family','P'=>'Patent case','M'=>'Trademark','R'=>'Search file'];
+    
     private $unycom=NULL;
 
-    function __construct()
+    function __construct(string $case='')
     {
+        $this->unycom=$this->parseCase($case);
     }
 
     /**
@@ -76,11 +79,15 @@ final class UNYCOM{
         return '';
     }
 
+    final public function getArray():array
+    {
+        return $this->unycom;
+    }
+    
     final public function isValid():bool
     {
         return FALSE;
     }
-
 
     /**
      * Setter methods
@@ -88,8 +95,73 @@ final class UNYCOM{
 
      final function setCase()
      {
-        
+
      }
+
+    private function parseCase(string $case):array
+    {
+        $unycom=['String'=>$case,'isValid'=>FALSE,'Year'=>'    ','Type'=>' ','Number'=>'     ','Region'=>'  ','Country'=>'  ','Part'=>'  '];
+        $case=' '.$case.' ';
+        // get case number
+        preg_match('/[^0-9]([0-9]{5})[^0-9]/',$case,$match);
+        if (!isset($match[1])){return $unycom;}
+        $unycom['Number']=$match[1];
+        // get year and case type
+        $caseComps=explode($match[1],$case);
+        preg_match('/[^0-9]([0-9]{2,4})([A-Z]{1,2})/',$caseComps[0],$match);
+        if (!isset($match[2])){return $unycom;}
+        $unycom['Year']=$match[1];
+        $unycom['Type']=$match[2];
+        if (strlen($unycom['Year'])===2){$unycom['Year']='19'.$unycom['Year'];}
+        // get prefix
+        $unycom['Prefix']=str_replace($match[0],'',$caseComps[0]);
+        $unycom['Prefix']=trim($unycom['Prefix'],' -');
+        // get region, country, part
+        $regionCountryPart=$caseComps[1];
+        $unycom['Part']=preg_replace('/[^0-9]/','',$regionCountryPart);
+        $regionCountry=preg_replace('/[^A-Z]/','',$regionCountryPart);
+        if (strlen($regionCountry)>2){
+            // region and country
+            $needles=[substr($regionCountry,0,2),substr($regionCountry,2)];
+        } else if (strlen($regionCountry)<2){
+            // no region, no country
+            $needles=[];
+        } else {
+            // region or country
+            $needles=[$regionCountry];
+        }
+        $regionFound=$countryFound=FALSE;
+        foreach($needles as $needle){
+            if (!$regionFound){
+                foreach(self::REGIONAL_CODES as $code=>$codeDescription){
+                    if ($code===$needle){
+                        $unycom['Region']=$code;
+                        $unycom['Region (long)']=$codeDescription;
+                        $regionFound=TRUE;
+                        break;
+                    }
+                }
+            }
+            if (!$countryFound){
+                foreach(self::COUNTRY_CODES as $code=>$codeDescription){
+                    if ($code===$needle){
+                        $unycom['Country']=$code;
+                        $unycom['Country (long)']=$codeDescription;
+                        $countryFound=TRUE;
+                        break;
+                    }
+                }
+            }
+        }
+        $unycom['Family']=$unycom['Year'].'F'.$unycom['Number'];
+        $unycom['Reference']=$unycom['Year'].$unycom['Type'].$unycom['Number'].$unycom['Region'].$unycom['Country'].$unycom['Part'];
+        $unycom['Reference without \s']=preg_replace('/\s+/','',$unycom['Reference']);
+        if (!empty($unycom['Prefix'])){
+            $unycom['Full']=$unycom['Prefix'].' - '.$unycom['Reference'];
+        }
+        $unycom['isValid']=TRUE;
+        return $unycom;
+    }
 
 }
 ?>
