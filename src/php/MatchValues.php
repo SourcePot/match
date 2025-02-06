@@ -10,8 +10,7 @@ declare(strict_types=1);
 
 namespace SourcePot\Match;
 
-require_once('../php/UNYCOM.php');
-require_once('../php/DateTime.php');
+require_once('../../vendor/autoload.php');
 
 final class MatchValues{
 
@@ -98,11 +97,11 @@ final class MatchValues{
                 $this->matchArr['match']=(mb_stripos($this->matchArr['toMatchValue'],$this->matchArr['value'])===FALSE)?0:1;
             }
         } else if ($this->matchArr['matchType']==='unycom'){
-            $unycomObj = new UNYCOM();
+            $unycomObj = new \SourcePot\Match\UNYCOM();
             $unycomObj->set($this->matchArr['value']);
             $this->matchArr['match']=$unycomObj->match($toMatchValue);
         } else if ($this->matchArr['matchType']==='dateTime'){
-            $dateTimeObj = new DateTime();
+            $dateTimeObj = new \SourcePot\Match\DateTime();
             $dateTimeObj->set($this->matchArr['value']);
             $this->matchArr['match']=$dateTimeObj->match($toMatchValue);
         }

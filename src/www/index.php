@@ -13,9 +13,9 @@ namespace SourcePot\Match;
 	
 mb_internal_encoding("UTF-8");
 
-$valueA=$_POST['valueA']??'HHI 2 - 98P42746WOvn04';
-$valueB=$_POST['valueB']??'HHI 2 - 1998P42746WO04';
-$matchtype=$_POST['matchtype']??'strpos';
+$valueA=$_POST['valueA']??'2024-04-23';
+$valueB=$_POST['valueB']??'2024-04-23 14:52:12';
+$matchtype=$_POST['matchtype']??'dateTime';
 
 require_once('../php/MatchValues.php');
 $matchObj = new MatchValues();

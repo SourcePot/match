@@ -13,11 +13,11 @@ namespace SourcePot\Match;
 final class DateTime{
 
     
-    private $dateTime=NULL;
+    private $dateTimeParser=NULL;
 
     function __construct()
     {
-        $this->dateTime=new \SourcePot\Asset\DateTimeParser();
+        $this->dateTimeParser=new \SourcePot\Asset\DateTimeParser();
     }
 
     /**
@@ -26,13 +26,13 @@ final class DateTime{
 
     final public function __toString():string
     {
-        $dateTime=$this->dateTime->get();
-        return $dateTime->format('Y-m-d H:i:s');
+        $dateTime=$this->dateTimeParser->get();
+        return $dateTime->format('c');
     }
 
     final public function get():\DateTime
     {
-        return $this->dateTime->get();
+        return $this->dateTimeParser->get();
     }
     
     /**
@@ -42,7 +42,7 @@ final class DateTime{
     final function set($value)
     {
 
-        $this->dateTime->set($value);
+        $this->dateTimeParser->set($value);
     }
 
     /**
@@ -52,19 +52,21 @@ final class DateTime{
     final public function match($value):float
     {
         // get  value A
-        $dateTime=$this->dateTime->get();
-        $valueA=$dateTime->format('Y-m-d H:i:s');
+        $dateTime=$this->dateTimeParser->get();
+        $dateA=$dateTime->format('Y-m-d');
+        $secA=intval($dateTime->format('s'))+60*intval($dateTime->format('i'))+3600*intval($dateTime->format('H'));
         // get value B
-        $this->dateTime->set($value);
-        $dateTime=$this->dateTime->get();
-        $valueB=$dateTime->format('Y-m-d H:i:s');
+        $this->dateTimeParser->set($value);
+        $dateTime=$this->dateTimeParser->get();
+        $dateB=$dateTime->format('Y-m-d');
+        $secB=intval($dateTime->format('s'))+60*intval($dateTime->format('i'))+3600*intval($dateTime->format('H'));
         // calculate match
-        if ($valueA===$valueB){
-            return 1;
-        } else if (strlen($valueA)>strlen($valueB)){
-            return (strpos($valueA,$valueB)===FALSE)?0:0.8;
-        } else if (strlen($valueA)<strlen($valueB)){
-            return (strpos($valueB,$valueA)===FALSE)?0:0.8;
+        if ($dateA===$dateB){
+            if ($secA===$secB){
+                return 1;
+            } else {
+                return 1-abs($secA-$secB)/86400;
+            }
         } else {
             return 0;
         }
