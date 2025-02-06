@@ -2,7 +2,7 @@
     "name":"sourcepot/match",
     "type":"library",
     "description":"PHP class providing an asset object",
-    "keywords":["email"],
+    "keywords":["match"],
     "homepage":"https://datapool.info",
     "license":"MIT",
     "authors":[{"name":"Carsten Wallenhauer","email":"admin@datapool.info"}],
