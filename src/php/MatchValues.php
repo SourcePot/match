@@ -11,12 +11,13 @@ declare(strict_types=1);
 namespace SourcePot\Match;
 
 require_once('../php/UNYCOM.php');
+require_once('../php/DateTime.php');
 
 final class MatchValues{
 
     private $matchArr=NULL;
 
-    private const MATCH_TYPES=['strpos'=>'Contains','stripos'=>'Contains (ci)','unycom'=>'UNYCOM case'];
+    private const MATCH_TYPES=['strpos'=>'Contains','stripos'=>'Contains (ci)','unycom'=>'UNYCOM case','dateTime'=>'DateTime'];
     
     function __construct()
     {
@@ -100,6 +101,10 @@ final class MatchValues{
             $unycomObj = new UNYCOM();
             $unycomObj->set($this->matchArr['value']);
             $this->matchArr['match']=$unycomObj->match($toMatchValue);
+        } else if ($this->matchArr['matchType']==='dateTime'){
+            $dateTimeObj = new DateTime();
+            $dateTimeObj->set($this->matchArr['value']);
+            $this->matchArr['match']=$dateTimeObj->match($toMatchValue);
         }
         return $this->matchArr['match']??0;
     }
