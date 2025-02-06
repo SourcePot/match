@@ -13,17 +13,18 @@ namespace SourcePot\Match;
 	
 mb_internal_encoding("UTF-8");
 
+$valueA=$_POST['valueA']??'HHI 2 - 98P42746WOvn04';
+$valueB=$_POST['valueB']??'HHI 2 - 1998P42746WO04';
+$matchtype=$_POST['matchtype']??'strpos';
+
 require_once('../php/MatchValues.php');
 $matchObj = new MatchValues();
 
-$valueA=$_POST['valueA']??'HHI 2 - 98P42746WOvn04';
-$valueB=$_POST['valueB']??'HHI 2 - 1998P42746WO04';
-$matchtype=$_POST['matchtype']??'';
 // compile html
 $html='<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta charset="utf-8"><title>Match</title><link type="text/css" rel="stylesheet" href="index.css"/></head>';
 $html.='<body><form name="892d183ba51083fc2a0b3d4d6453e20b" id="892d183ba51083fc2a0b3d4d6453e20b" method="post" enctype="multipart/form-data">';
 $html.='<h1>Evaluation Page for the Match-Package</h1>';
-$html.='<div class="control"><h2>Asset properties for instantiation</h2>';
+$html.='<div class="control"><h2>Value A, Value B and Match-type setting</h2>';
 $html.='<input type="text" value="'.$valueA.'" name="valueA" id="valueA" style="margin:0.25em;"/>';
 $html.='<input type="text" value="'.$valueB.'" name="valueB" id="valueB" style="margin:0.25em;"/>';
 $html.='<select name="matchtype" id="matchtype">';
@@ -37,19 +38,21 @@ $html.='<input type="submit" name="test" id="set" style="margin:0.25em;" value="
 $html.='</div>';
 $html.='</form>';
 
-require_once('../php/UNYCOM.php');
-$unycomObj=new UNYCOM($valueA);
+require_once('../php/Helper.php');
+$helperObj = new Helper();
 
-// print asset
-$html.='<table>';
-$html.='<caption>UNYCOM case parser test</caption>';
-foreach($unycomObj->getArray() as $key=>$value){
-    if (is_object($value)){
-        $value=$value->format('Y-m-d');
-    }
-    $html.='<tr><td>'.$key.'</td><td>'.$value.'</td></tr>';
+if ($matchtype=='unycom'){
+    require_once('../php/UNYCOM.php');
+    $unycomObj = new UNYCOM();
+    $unycomObj->set($valueA);  
+    $html.=$helperObj->value2html($unycomObj->get(),'UNYCOM value A');
+    $unycomObj->set($valueB);  
+    $html.=$helperObj->value2html($unycomObj->get(),'UNYCOM value B');
 }
-$html.='</table>';
+
+$matchObj->set($valueA,$matchtype);
+$match=$matchObj->match($valueB);
+$html.=$helperObj->value2html($matchObj->get(),'Match');
 
 $html.='<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>';
 $html.='<script src="index.js"></script>';

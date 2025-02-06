@@ -62,12 +62,14 @@ final class UNYCOM{
                                  'ZM'=>'ZAMBIA','ZW'=>'ZIMBABWE',];
     
     private const CASE_TYPE=['XF'=>'Third party patent family','MF'=>'Tradmark family','E'=>'Invention','F'=>'Patent family','P'=>'Patent case','M'=>'Trademark','R'=>'Search file'];
-    
-    private $unycom=NULL;
+    private const WEIGHTS=['Year'=>2,'Type'=>1,'Number'=>4,'Region'=>1,'Country'=>1,'Part'=>1];
+    private const UNYCOM_TEMPLATE=['String'=>'','isValid'=>FALSE,'Year'=>'    ','Type'=>' ','Number'=>'     ','Region'=>'  ','Country'=>'  ','Part'=>'  ','Family'=>' ','Reference'=>'','Full'=>''];
 
-    function __construct(string $case='')
+    private $unycom=self::UNYCOM_TEMPLATE;
+
+    function __construct()
     {
-        $this->unycom=$this->parseCase($case);
+        
     }
 
     /**
@@ -76,29 +78,62 @@ final class UNYCOM{
 
     final public function __toString():string
     {
-        return '';
+        return $this->unycom['Full'];
     }
 
-    final public function getArray():array
+    final public function get():array
     {
         return $this->unycom;
     }
     
     final public function isValid():bool
     {
-        return FALSE;
+        return $this->unycom['isValid'];
     }
 
     /**
      * Setter methods
      */
 
-     final function setCase()
-     {
+    final function set($case)
+    {
 
-     }
+        $this->unycom=$this->var2case($case);
+    }
 
-    private function parseCase(string $case):array
+    /**
+     * Feature methods
+     */
+
+    private function var2case($var):array
+    {
+        if (empty($var)){
+            throw new \Exception("Empty case provided."); 
+        } else if (is_array($var)){
+            $allKeysSet=TRUE;
+            foreach(self::UNYCOM_TEMPLATE as $key=>$initValue){
+                if (isset($var[$key])){
+                    if ($key==='Reference' || $key==='Full'){
+                        $relevantCaseString=$var[$key];
+                    }
+                } else {
+                    $allKeysSet=FALSE;
+                }
+            }
+            if (!$allKeysSet){
+                if (empty($relevantCaseString)){
+                    throw new \Exception("Invalid case provided. Case should by of type string or an array with at least key \'Reference\' or \'Full\' set."); 
+                } else {
+                    $case=$this->parse($relevantCaseString);
+                }
+            }
+        } else {
+            $case=$this->parse(strval($var));
+        }
+        return $case;
+    }
+
+    private function parse(string $case):array
     {
         $unycom=['String'=>$case,'isValid'=>FALSE,'Year'=>'    ','Type'=>' ','Number'=>'     ','Region'=>'  ','Country'=>'  ','Part'=>'  '];
         $case=' '.strtoupper($case).' ';
@@ -161,6 +196,20 @@ final class UNYCOM{
         }
         $unycom['isValid']=TRUE;
         return $unycom;
+    }
+
+    final public function match($case):float
+    {
+        $case=$this->var2case($case);
+        $match=0;
+        $maxWeight=0;
+        foreach(self::WEIGHTS as $key=>$weight){
+            $maxWeight+=$weight;
+            if ($case[$key]===$this->unycom[$key]){
+                $match+=$weight;
+            }
+        }
+        return $match/$maxWeight;
     }
 
 }
