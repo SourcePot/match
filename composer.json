@@ -1,7 +1,7 @@
 {
     "name":"sourcepot/match",
     "type":"library",
-    "description":"PHP class providing an asset object",
+    "description":"PHP class providing a match object",
     "keywords":["match"],
     "homepage":"https://datapool.info",
     "license":"MIT",
