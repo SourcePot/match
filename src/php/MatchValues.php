@@ -16,7 +16,7 @@ final class MatchValues{
 
     private $matchArr=NULL;
 
-    private const MATCH_TYPES=['strpos'=>'Contains','stripos'=>'Contains (ci)','unycom'=>'UNYCOM case','dateTime'=>'DateTime'];
+    private const MATCH_TYPES=['strpos'=>'Contains','stripos'=>'Contains (ci)','stringChunks'=>'String chunks','unycom'=>'UNYCOM case','dateTime'=>'DateTime'];
     
     function __construct()
     {
@@ -75,14 +75,13 @@ final class MatchValues{
      * Feature methods
      */
 
-     final public function getMatchTypes():array
-     {
-         return self::MATCH_TYPES;
-     }
+    final public function getMatchTypes():array
+    {
+        return self::MATCH_TYPES;
+    }
  
-     final public function match($toMatchValue):float
-        {
-        $match=0;
+    final public function match($toMatchValue):float|int
+    {
         $this->matchArr['toMatchValue']=$toMatchValue;
         if ($this->matchArr['matchType']==='strpos'){
             if (mb_strlen($this->matchArr['value'])>mb_strlen($this->matchArr['toMatchValue'])){
@@ -96,16 +95,42 @@ final class MatchValues{
             } else {
                 $this->matchArr['match']=(mb_stripos($this->matchArr['toMatchValue'],$this->matchArr['value'])===FALSE)?0:1;
             }
+        } else if ($this->matchArr['matchType']==='stringChunks'){
+            $this->matchArr['match']=$this->stringChunksMatch($this->matchArr['value'],$toMatchValue);
         } else if ($this->matchArr['matchType']==='unycom'){
             $unycomObj = new \SourcePot\Match\UNYCOM();
             $unycomObj->set($this->matchArr['value']);
-            $this->matchArr['match']=$unycomObj->match($toMatchValue);
+            if ($unycomObj->isValid()){
+                $this->matchArr['match']=$unycomObj->match($toMatchValue);
+            } else {
+                $this->matchArr['match']=0;
+            }
         } else if ($this->matchArr['matchType']==='dateTime'){
             $dateTimeObj = new \SourcePot\Match\DateTime();
             $dateTimeObj->set($this->matchArr['value']);
             $this->matchArr['match']=$dateTimeObj->match($toMatchValue);
         }
         return $this->matchArr['match']??0;
+    }
+
+    private function stringChunksMatch($stringA,$stringB):float|int
+    {
+        $pattern='/[\'";,|\/\\\]+/';
+        if (mb_strlen($stringA)>mb_strlen($stringB)){
+            $testString=$stringB;
+            $chunks=preg_split($pattern,$stringA);
+            $chunksCompare=preg_split($pattern,$stringB);
+        } else {
+            $testString=$stringA;
+            $chunksCompare=preg_split($pattern,$stringA);
+            $chunks=preg_split($pattern,$stringB);
+        }
+        $matchCount=$count=0;
+        foreach($chunks as $chunk){
+            if (mb_strpos($testString,$chunk)===FALSE){$matchCount++;}
+            $count++;
+        }
+        return ((1-$matchCount/$count)-(1-count($chunksCompare)/count($chunks)));
     }
 
 }

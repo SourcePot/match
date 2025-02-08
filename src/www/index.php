@@ -13,9 +13,9 @@ namespace SourcePot\Match;
 	
 mb_internal_encoding("UTF-8");
 
-$valueA=$_POST['valueA']??'2024-04-23';
-$valueB=$_POST['valueB']??'2024-04-23 14:52:12';
-$matchtype=$_POST['matchtype']??'dateTime';
+$valueA=$_POST['valueA']??'100095646\chä6477/测试,用例\'Hallo"Test';
+$valueB=$_POST['valueB']??'100095646\chä6477/测试,用例\'Hallo"Test';
+$matchtype=$_POST['matchtype']??'stringChunks';
 
 require_once('../php/MatchValues.php');
 $matchObj = new MatchValues();
@@ -42,12 +42,17 @@ require_once('../php/Helper.php');
 $helperObj = new Helper();
 
 if ($matchtype=='unycom'){
-    require_once('../php/UNYCOM.php');
     $unycomObj = new UNYCOM();
     $unycomObj->set($valueA);  
     $html.=$helperObj->value2html($unycomObj->get(),'UNYCOM value A');
     $unycomObj->set($valueB);  
     $html.=$helperObj->value2html($unycomObj->get(),'UNYCOM value B');
+} else if ($matchtype=='dateTime'){
+    $dateTimeObj = new DateTime();
+    $dateTimeObj->set($valueA);  
+    $html.=$helperObj->value2html($dateTimeObj->__toString(),'DateTime value A');
+    $dateTimeObj->set($valueB);  
+    $html.=$helperObj->value2html($dateTimeObj->__toString(),'DateTime value B');
 }
 
 $matchObj->set($valueA,$matchtype);

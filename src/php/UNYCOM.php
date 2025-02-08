@@ -198,9 +198,10 @@ final class UNYCOM{
         return $unycom;
     }
 
-    final public function match($case):float
+    final public function match($case):float|int
     {
         $case=$this->var2case($case);
+        if (!$case['isValid']){return 0;}
         $match=0;
         $maxWeight=0;
         foreach(self::WEIGHTS as $key=>$weight){

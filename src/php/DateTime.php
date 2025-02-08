@@ -49,24 +49,15 @@ final class DateTime{
      * Feature methods
      */
 
-    final public function match($value):float
+    final public function match($value):float|int
     {
-        // get  value A
-        $dateTime=$this->dateTimeParser->get();
-        $dateA=$dateTime->format('Y-m-d');
-        $secA=intval($dateTime->format('s'))+60*intval($dateTime->format('i'))+3600*intval($dateTime->format('H'));
-        // get value B
+        $timestampA=$this->dateTimeParser->get()->getTimestamp();
         $this->dateTimeParser->set($value);
-        $dateTime=$this->dateTimeParser->get();
-        $dateB=$dateTime->format('Y-m-d');
-        $secB=intval($dateTime->format('s'))+60*intval($dateTime->format('i'))+3600*intval($dateTime->format('H'));
-        // calculate match
-        if ($dateA===$dateB){
-            if ($secA===$secB){
-                return 1;
-            } else {
-                return 1-abs($secA-$secB)/86400;
-            }
+        $timestampB=$this->dateTimeParser->get()->getTimestamp();
+        if ($timestampA===$timestampB){
+            return 1;
+        } else if (abs($timestampB-$timestampA)<86400){
+            return (86400-abs($timestampB-$timestampA))/86400;
         } else {
             return 0;
         }
