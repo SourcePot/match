@@ -13,8 +13,8 @@ namespace SourcePot\Match;
 	
 mb_internal_encoding("UTF-8");
 
-$valueA=$_POST['valueA']??'100095646\chä6477/测试,用例\'Hallo"Test';
-$valueB=$_POST['valueB']??'100095646\chä6477/测试,用例\'Hallo"Test';
+$valueA=$_POST['valueA']??'100095646\chä6477/测试,用例(Hallo)Test';
+$valueB=$_POST['valueB']??'100095646\chä6477/测试,用例(Hallo)Test';
 $matchtype=$_POST['matchtype']??'stringChunks';
 
 require_once('../php/MatchValues.php');

@@ -115,7 +115,7 @@ final class MatchValues{
 
     private function stringChunksMatch($stringA,$stringB):float|int
     {
-        $pattern='/[\'";,|\/\\\]+/';
+        $pattern='/[\{\}\[\]\(\)\'";,|\/\\\]+/';
         if (mb_strlen($stringA)>mb_strlen($stringB)){
             $testString=$stringB;
             $chunks=preg_split($pattern,$stringA);
