@@ -16,7 +16,7 @@ final class MatchValues{
 
     private $matchArr=NULL;
 
-    private const MATCH_TYPES=['strpos'=>'Contains','stripos'=>'Contains (ci)','stringChunks'=>'String chunks','unycom'=>'UNYCOM case','dateTime'=>'DateTime'];
+    private const MATCH_TYPES=['strpos'=>'Contains','stripos'=>'Contains (ci)','matchInt'=>'Integer match','matchFloat'=>'Float match','stringChunks'=>'String chunk match','unycom'=>'UNYCOM case','dateTime'=>'DateTime'];
     
     function __construct()
     {
@@ -95,6 +95,10 @@ final class MatchValues{
             } else {
                 $this->matchArr['match']=(mb_stripos($this->matchArr['toMatchValue'],$this->matchArr['value'])===FALSE)?0:1;
             }
+        } else if ($this->matchArr['matchType']==='matchInt'){
+            $this->matchArr['match']=$this->numberMatch($this->matchArr['value'],$toMatchValue,$this->matchArr['matchType']);
+        } else if ($this->matchArr['matchType']==='matchFloat'){
+            $this->matchArr['match']=$this->numberMatch($this->matchArr['value'],$toMatchValue,$this->matchArr['matchType']);
         } else if ($this->matchArr['matchType']==='stringChunks'){
             $this->matchArr['match']=$this->stringChunksMatch($this->matchArr['value'],$toMatchValue);
         } else if ($this->matchArr['matchType']==='unycom'){
@@ -119,18 +123,33 @@ final class MatchValues{
         if (mb_strlen($stringA)>mb_strlen($stringB)){
             $testString=$stringB;
             $chunks=preg_split($pattern,$stringA);
-            $chunksCompare=preg_split($pattern,$stringB);
         } else {
             $testString=$stringA;
-            $chunksCompare=preg_split($pattern,$stringA);
             $chunks=preg_split($pattern,$stringB);
         }
         $matchCount=$count=0;
         foreach($chunks as $chunk){
+            if (empty($chunk)){continue;}
             if (mb_strpos($testString,$chunk)===FALSE){$matchCount++;}
             $count++;
         }
-        return ((1-$matchCount/$count)-(1-count($chunksCompare)/count($chunks)));
+        return 1-$matchCount/$count;
+    }
+
+    private function numberMatch($valA,$valB,$type='matchInt'):float|int
+    {
+        if ($valA===$valB){return 1;}
+        $helperObj = new Helper();
+        $valA=$helperObj->string2number($valA);
+        $valB=$helperObj->string2number($valB);
+        if ($valA===$valB){return 1;}
+        $valA=floatval($valA);
+        $valB=floatval($valB);
+        if ($type==='matchInt'){
+            $valA=intval(round($valA));
+            $valB=intval(round($valB));
+        }
+        return (($valA>$valB)?$valB:$valA)/(($valA>$valB)?$valA:$valB);
     }
 
 }
