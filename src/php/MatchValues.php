@@ -120,7 +120,11 @@ final class MatchValues{
         } else if ($this->matchArr['matchType']==='dateTime'){
             $dateTimeObj = new \SourcePot\Match\DateTime();
             $dateTimeObj->set($this->matchArr['value']);
-            $this->matchArr['match']=$dateTimeObj->match($toMatchValue);
+            if ($dateTimeObj->isValid()){
+                $this->matchArr['match']=$dateTimeObj->match($toMatchValue);
+            } else {
+                $this->matchArr['match']=0;
+            }
         }
         return $this->matchArr['match']??0;
     }

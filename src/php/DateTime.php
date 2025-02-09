@@ -35,6 +35,11 @@ final class DateTime{
         return $this->dateTimeParser->get();
     }
     
+    final public function isValid():bool
+    {
+        return $this->dateTimeParser->isValid();
+    }
+    
     /**
      * Setter methods
      */
@@ -53,6 +58,7 @@ final class DateTime{
     {
         $timestampA=$this->dateTimeParser->get()->getTimestamp();
         $this->dateTimeParser->set($value);
+        if (!$this->dateTimeParser->isValid()){return 0;}
         $timestampB=$this->dateTimeParser->get()->getTimestamp();
         if ($timestampA===$timestampB){
             return 1;
