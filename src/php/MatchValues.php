@@ -150,6 +150,7 @@ final class MatchValues{
         $helperObj = new Helper();
         $valA=$helperObj->string2number($valA);
         $valB=$helperObj->string2number($valB);
+        if ($valA===FALSE || $valB===FALSE){return 0;}
         if ($valA===$valB){return 1;}
         $valA=floatval($valA);
         $valB=floatval($valB);
@@ -157,7 +158,8 @@ final class MatchValues{
             $valA=intval(round($valA));
             $valB=intval(round($valB));
         }
-        return (($valA>$valB)?$valB:$valA)/(($valA>$valB)?$valA:$valB);
+        $match=(($valA>$valB)?$valB:$valA)/(($valA>$valB)?$valA:$valB);
+        return ($match<0)?0:$match;
     }
 
 }

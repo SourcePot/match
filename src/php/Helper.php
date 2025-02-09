@@ -41,10 +41,14 @@ final class Helper{
         return $html;
     }
 
-    public function string2number($string):float
+    public function string2number($string):float|bool
     {
         // recover value
-        $numberStr=preg_replace('/[^0-9,.+-eE]+/','',$string);
+
+        
+        preg_match('/[+\-]{0,1}[0-9,.]+[eE+\-]{0,2}[0-9]+/',$string,$match);
+        if (!isset($match[0])){return FALSE;}
+        $numberStr=$match[0];
         $chrArr=count_chars($numberStr,1);
         if (($chrArr[44]??0)>1){$numberStr=str_replace(',','',$numberStr);}
         if (($chrArr[46]??0)>1){$numberStr=str_replace('.','',$numberStr);}
