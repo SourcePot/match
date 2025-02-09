@@ -16,7 +16,7 @@ final class MatchValues{
 
     private $matchArr=NULL;
 
-    private const MATCH_TYPES=['strpos'=>'Contains','stripos'=>'Contains (ci)','matchInt'=>'Integer match','matchFloat'=>'Float match','stringChunks'=>'String chunk match','unycom'=>'UNYCOM case','dateTime'=>'DateTime'];
+    private const MATCH_TYPES=[''=>'Identical','strpos'=>'Contains','!strpos'=>'Does not contain','stripos'=>'Contains (ci)','!stripos'=>'Does not contain (ci)','matchInt'=>'Integer match','matchFloat'=>'Float match','stringChunks'=>'String chunk match','unycom'=>'UNYCOM case','dateTime'=>'DateTime'];
     
     function __construct()
     {
@@ -83,17 +83,25 @@ final class MatchValues{
     final public function match($toMatchValue):float|int
     {
         $this->matchArr['toMatchValue']=$toMatchValue;
-        if ($this->matchArr['matchType']==='strpos'){
+        if (empty($this->matchArr['matchType'])){
+            $this->matchArr['match']=($this->matchArr['value']===$this->matchArr['toMatchValue'])?1:0;
+        } else if ($this->matchArr['matchType']==='strpos' || $this->matchArr['matchType']==='!strpos'){
             if (mb_strlen($this->matchArr['value'])>mb_strlen($this->matchArr['toMatchValue'])){
                 $this->matchArr['match']=(mb_strpos($this->matchArr['value'],$this->matchArr['toMatchValue'])===FALSE)?0:1;
             } else {
                 $this->matchArr['match']=(mb_strpos($this->matchArr['toMatchValue'],$this->matchArr['value'])===FALSE)?0:1;
             }
-        } else if ($this->matchArr['matchType']==='stripos'){
+            if ($this->matchArr['matchType']==='!strpos'){
+                $this->matchArr['match']=($this->matchArr['match']===0)?1:0;
+            }
+        } else if ($this->matchArr['matchType']==='stripos' || $this->matchArr['matchType']==='!stripos'){
             if (mb_strlen($this->matchArr['value'])>mb_strlen($this->matchArr['toMatchValue'])){
                 $this->matchArr['match']=(mb_stripos($this->matchArr['value'],$this->matchArr['toMatchValue'])===FALSE)?0:1;
             } else {
                 $this->matchArr['match']=(mb_stripos($this->matchArr['toMatchValue'],$this->matchArr['value'])===FALSE)?0:1;
+            }
+            if ($this->matchArr['matchType']==='!stripos'){
+                $this->matchArr['match']=($this->matchArr['match']===0)?1:0;
             }
         } else if ($this->matchArr['matchType']==='matchInt'){
             $this->matchArr['match']=$this->numberMatch($this->matchArr['value'],$toMatchValue,$this->matchArr['matchType']);
