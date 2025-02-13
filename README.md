@@ -7,7 +7,7 @@ The following code examples require the namespace to be set to `namespace Source
 ## Features
 - Simple and complex value matches, from simple string contain to UNYCOM cases
 - Extraction of a 'needles' from the input value used to pre-filter database entries and create a haystack
-- Returns a match probability between the input value and entries of the haystack
+- Returns a match probability 0...1 for the input value compared with entries of the haystack
 
 # Sample code
 ```
