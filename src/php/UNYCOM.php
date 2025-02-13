@@ -39,7 +39,7 @@ final class UNYCOM{
                                  'EG'=>'EGYPT','EU'=>'EUROPEAN UNION','SV'=>'EL SALVADOR','GQ'=>'EQUATORIAL GUINEA','ER'=>'ERITREA','EE'=>'ESTONIA','SZ'=>'ESWATINI','ET'=>'ETHIOPIA',
                                  'FK'=>'FALKLAND ISLANDS (MALVINAS)','FO'=>'FAROE ISLANDS','FJ'=>'FIJI','FI'=>'FINLAND','FR'=>'FRANCE','GA'=>'GABON','GM'=>'GAMBIA',
                                  'GE'=>'GEORGIA','DE'=>'GERMANY','GH'=>'GHANA','GI'=>'GIBRALTAR','GR'=>'GREECE','GL'=>'GREENLAND','GD'=>'GRENADA','GT'=>'GUATEMALA',
-                                 'GG'=>'GUERNSEY','GN'=>'GUINEA','GW'=>'GUINEA-BISSAU','GY'=>'GUYANA','HT'=>'HAITI','VA'=>'HOLY SEE',''=>'HONDURAS',''=>'HONG KONG, CHINA',
+                                 'GG'=>'GUERNSEY','GN'=>'GUINEA','GW'=>'GUINEA-BISSAU','GY'=>'GUYANA','HK'=>'HONGKONG','HT'=>'HAITI','VA'=>'HOLY SEE',''=>'HONDURAS',''=>'HONG KONG, CHINA',
                                  'HU'=>'HUNGARY','IS'=>'ICELAND','IN'=>'INDIA','ID'=>'INDONESIA','IR'=>'IRAN (ISLAMIC REPUBLIC OF)','IQ'=>'IRAQ','IE'=>'IRELAND',
                                  'IM'=>'ISLE OF MAN','IL'=>'ISRAEL','IT'=>'ITALY','JM'=>'JAMAICA','JP'=>'JAPAN','JE'=>'JERSEY','JO'=>'JORDAN','KZ'=>'KAZAKHSTAN',
                                  'KE'=>'KENYA','KI'=>'KIRIBATI','KW'=>'KUWAIT','KG'=>'KYRGYZSTAN','LA'=>'LAO PEOPLE\'S DEMOCRATIC REPUBLIC','LV'=>'LATVIA','LB'=>'LEBANON',
@@ -65,6 +65,8 @@ final class UNYCOM{
     private const WEIGHTS=['Year'=>2,'Type'=>1,'Number'=>4,'Region'=>1,'Country'=>1,'Part'=>1];
     private const UNYCOM_TEMPLATE=['String'=>'','isValid'=>FALSE,'Year'=>'    ','Type'=>' ','Number'=>'     ','Region'=>'  ','Country'=>'  ','Part'=>'  ','Family'=>' ','Reference'=>'','Full'=>''];
 
+    public const UNYCOM_REGEX='/([0-9]{4})([ ]{0,1}[A-Z]{1,2})([0-9]{5})([A-Z ]{0,5})([0-9]{0,2})\s/u';
+
     private $unycom=self::UNYCOM_TEMPLATE;
 
     function __construct()
@@ -89,6 +91,14 @@ final class UNYCOM{
     final public function isValid():bool
     {
         return $this->unycom['isValid'];
+    }
+
+    final public function fetchCase(string $string)
+    {
+        preg_match_all(self::UNYCOM_REGEX,$string,$matches);
+        foreach($matches[0] as $match){
+            yield $match;
+        }
     }
 
     /**
@@ -151,7 +161,7 @@ final class UNYCOM{
         // get region, country, part
         $regionCountryPart=$caseComps[1];
         $unycom['Part']=preg_replace('/[^0-9]/','',$regionCountryPart);
-        $unycom['Part']=str_pad($unycom['Part'],2,"0", STR_PAD_LEFT);
+        $unycom['Part']=(empty($unycom['Part']))?'  ':str_pad($unycom['Part'],2,"0", STR_PAD_LEFT);
         $unycom['Part']=substr($unycom['Part'],0,2);
         $regionCountry=preg_replace('/[^A-Z]/','',$regionCountryPart);
         if (strlen($regionCountry)>2){
