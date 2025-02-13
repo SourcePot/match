@@ -17,7 +17,7 @@ namespace SourcePot\Match;
 
 require_once('../../vendor/autoload.php');
 
-// create an instance of match object
+// create an instance of class MatchValues
 $matchObj = new MatchValues(); 
 
 // set the value you like to match with other values of a haystack and set match type
