@@ -56,8 +56,11 @@ if ($matchtype=='unycom'){
 }
 
 $matchObj->set($valueA,$matchtype);
+$needle=$matchObj->prepareMatch();
 $match=$matchObj->match($valueB);
-$html.=$helperObj->value2html($matchObj->get(),'Match');
+$result=$matchObj->get();
+$result['needle']=$needle;
+$html.=$helperObj->value2html($result,'Match');
 
 $html.='<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>';
 $html.='<script src="index.js"></script>';

@@ -16,8 +16,9 @@ final class MatchValues{
 
     private $matchArr=NULL;
 
-    private const MATCH_TYPES=[''=>'Identical','strpos'=>'Contains','!strpos'=>'Does not contain','stripos'=>'Contains (ci)','!stripos'=>'Does not contain (ci)','matchInt'=>'Integer match','matchFloat'=>'Float match','stringChunks'=>'String chunk match','unycom'=>'UNYCOM case','dateTime'=>'DateTime'];
-    
+    private const MATCH_TYPES=[''=>'Identical','strpos'=>'Contains','!strpos'=>'Does not contain','stripos'=>'Contains (ci)','!stripos'=>'Does not contain (ci)','likenessContains'=>'Likeness contains','likenessMatch'=>'Likeness match','matchInt'=>'Integer match','matchFloat'=>'Float match','stringChunks'=>'String chunk match','unycom'=>'UNYCOM case','dateTime'=>'DateTime'];
+    private const DB_TIMEZONE='UTC';
+
     function __construct()
     {
         $this->matchArr=['value'=>'','matchType'=>'','toMatchValue'=>'','match'=>0];
@@ -57,7 +58,27 @@ final class MatchValues{
      {
          return $this->matchArr;
      }
-  
+
+     final function prepareMatch():string
+     {
+        if ($this->matchArr['matchType']==='unycom'){
+            $this->matchArr['obj'] = new \SourcePot\Match\UNYCOM();
+            $this->matchArr['obj']->set($this->matchArr['value']);
+            $unycomArr=$this->matchArr['obj']->get();
+            return '%'.$unycomArr['Number'].'%';
+        } else if ($this->matchArr['matchType']==='dateTime'){
+            $this->matchArr['obj'] = new \SourcePot\Match\DateTime();
+            $this->matchArr['obj']->set($this->matchArr['value']);
+            $dateTimeObj=$this->matchArr['obj']->get();
+            $dateTimeObj->setTimezone(new \DateTimeZone(self::DB_TIMEZONE));
+            return $dateTimeObj->format('Y-m-d').'%';
+        } else if ($this->matchArr['matchType']==='' || $this->matchArr['matchType']==='strpos'){
+            return '%'.$this->matchArr['value'].'%';
+        } else {
+            return '%';
+        }
+     }
+
     /**
      * Setter methods
      */
@@ -65,6 +86,7 @@ final class MatchValues{
     final public function set($value,string $matchType)
     {
         if (isset(self::MATCH_TYPES[$matchType])){
+            $this->matchArr['obj']=NULL;
             $this->matchArr=['value'=>$value,'matchType'=>$matchType];
         } else {
             throw new \Exception("\"$matchType\" is not a valid match type"); 
@@ -103,6 +125,8 @@ final class MatchValues{
             if ($this->matchArr['matchType']==='!stripos'){
                 $this->matchArr['match']=($this->matchArr['match']===0)?1:0;
             }
+        } else if ($this->matchArr['matchType']==='likenessContains' || $this->matchArr['matchType']==='likenessMatch'){
+            $this->matchArr['match']=$this->likeness($this->matchArr['value'],$toMatchValue,$this->matchArr['matchType']);
         } else if ($this->matchArr['matchType']==='matchInt'){
             $this->matchArr['match']=$this->numberMatch($this->matchArr['value'],$toMatchValue,$this->matchArr['matchType']);
         } else if ($this->matchArr['matchType']==='matchFloat'){
@@ -110,18 +134,14 @@ final class MatchValues{
         } else if ($this->matchArr['matchType']==='stringChunks'){
             $this->matchArr['match']=$this->stringChunksMatch($this->matchArr['value'],$toMatchValue);
         } else if ($this->matchArr['matchType']==='unycom'){
-            $unycomObj = new \SourcePot\Match\UNYCOM();
-            $unycomObj->set($this->matchArr['value']);
-            if ($unycomObj->isValid()){
-                $this->matchArr['match']=$unycomObj->match($toMatchValue);
+            if ($this->matchArr['obj']->isValid()){
+                $this->matchArr['match']=$this->matchArr['obj']->match($toMatchValue);
             } else {
                 $this->matchArr['match']=0;
             }
         } else if ($this->matchArr['matchType']==='dateTime'){
-            $dateTimeObj = new \SourcePot\Match\DateTime();
-            $dateTimeObj->set($this->matchArr['value']);
-            if ($dateTimeObj->isValid()){
-                $this->matchArr['match']=$dateTimeObj->match($toMatchValue);
+            if ($this->matchArr['obj']->isValid()){
+                $this->matchArr['match']=$this->matchArr['obj']->match($toMatchValue);
             } else {
                 $this->matchArr['match']=0;
             }
@@ -164,6 +184,36 @@ final class MatchValues{
         }
         $match=(($valA>$valB)?$valB:$valA)/(($valA>$valB)?$valA:$valB);
         return ($match<0)?0:$match;
+    }
+
+    private function likeness($stringA,$stringB,$matchType):float|int
+    {
+        if ($stringA===$stringB){return 1;}
+        $stringA=strval($stringA);
+        $stringB=strval($stringB);
+        $chrsA=mb_str_split($stringA);
+        $chrsB=mb_str_split($stringB);
+        if (count($chrsB)>count($chrsA)){
+            $tmp=$chrsA;
+            $chrsA=$chrsB;
+            $chrsB=$tmp;
+        }
+        $topLikeness=0;
+        for($shift=0;$shift<count($chrsA);$shift++){
+            $likeness=0;
+            foreach($chrsB as $indexB=>$chrB){
+                $indexA=$indexB+$shift;
+                if (isset($chrsA[$indexA])){
+                    if ($chrsA[$indexA]===$chrB){
+                        $likeness++;
+                    }
+                }
+            }
+            if ($likeness>$topLikeness){
+                $topLikeness=$likeness;
+            }
+        }
+        return $topLikeness/(($matchType==='likenessMatch')?count($chrsA):count($chrsB));
     }
 
 }

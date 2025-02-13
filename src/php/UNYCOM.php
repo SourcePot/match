@@ -108,24 +108,21 @@ final class UNYCOM{
     private function var2case($var):array
     {
         if (empty($var)){
-            throw new \Exception("Empty case provided."); 
+            return self::UNYCOM_TEMPLATE;
         } else if (is_array($var)){
-            $allKeysSet=TRUE;
+            $relevantCaseString='';
             foreach(self::UNYCOM_TEMPLATE as $key=>$initValue){
                 if (isset($var[$key])){
                     if ($key==='Reference' || $key==='Full'){
                         $relevantCaseString=$var[$key];
                     }
-                } else {
-                    $allKeysSet=FALSE;
+                    break;
                 }
             }
-            if (!$allKeysSet){
-                if (empty($relevantCaseString)){
-                    throw new \Exception("Invalid case provided. Case should by of type string or an array with at least key \'Reference\' or \'Full\' set."); 
-                } else {
-                    $case=$this->parse($relevantCaseString);
-                }
+            if (empty($relevantCaseString)){
+                return self::UNYCOM_TEMPLATE;
+            } else {
+                $case=$this->parse($relevantCaseString);
             }
         } else {
             $case=$this->parse(strval($var));
@@ -135,7 +132,7 @@ final class UNYCOM{
 
     private function parse(string $case):array
     {
-        $unycom=['String'=>$case,'isValid'=>FALSE,'Year'=>'    ','Type'=>' ','Number'=>'     ','Region'=>'  ','Country'=>'  ','Part'=>'  '];
+        $unycom=self::UNYCOM_TEMPLATE;
         $case=' '.strtoupper($case).' ';
         // get case number
         preg_match('/[^0-9]([0-9]{5})[^0-9]/',$case,$match);
