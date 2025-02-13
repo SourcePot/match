@@ -16,7 +16,8 @@ final class MatchValues{
 
     private $matchArr=NULL;
 
-    private const MATCH_TYPES=[''=>'Identical','strpos'=>'Contains','!strpos'=>'Does not contain','stripos'=>'Contains (ci)','!stripos'=>'Does not contain (ci)','likenessContains'=>'Likeness contains','likenessMatch'=>'Likeness match','matchInt'=>'Integer match','matchFloat'=>'Float match','stringChunks'=>'String chunk match','unycom'=>'UNYCOM case','dateTime'=>'DateTime'];
+    private const MATCH_TYPES=[''=>'Identical','strpos'=>'Contains','!strpos'=>'Does not contain','stripos'=>'Contains (ci)','!stripos'=>'Does not contain (ci)','correlationContains'=>'Correlation contains','correlationMatch'=>'Correlation match','matchInt'=>'Integer match','matchFloat'=>'Float match','stringChunks'=>'String chunk match','patent'=>'Patent case','unycom'=>'UNYCOM case','dateTime'=>'DateTime'];
+    private const STRING_CHUNK_SEPARATOR_REGEX='/[\{\}\[\]\(\)\'";,|\/\\.\s]+/';
     private const DB_TIMEZONE='UTC';
 
     function __construct()
@@ -74,6 +75,8 @@ final class MatchValues{
             return $dateTimeObj->format('Y-m-d').'%';
         } else if ($this->matchArr['matchType']==='' || $this->matchArr['matchType']==='strpos'){
             return '%'.$this->matchArr['value'].'%';
+        } else if ($this->matchArr['matchType']==='patent'){
+            return '%'.$this->patentNeedle($this->matchArr['value']).'%';
         } else {
             return '%';
         }
@@ -125,14 +128,16 @@ final class MatchValues{
             if ($this->matchArr['matchType']==='!stripos'){
                 $this->matchArr['match']=($this->matchArr['match']===0)?1:0;
             }
-        } else if ($this->matchArr['matchType']==='likenessContains' || $this->matchArr['matchType']==='likenessMatch'){
-            $this->matchArr['match']=$this->likeness($this->matchArr['value'],$toMatchValue,$this->matchArr['matchType']);
+        } else if ($this->matchArr['matchType']==='correlationContains' || $this->matchArr['matchType']==='correlationMatch'){
+            $this->matchArr['match']=$this->correlation($this->matchArr['value'],$toMatchValue,$this->matchArr['matchType']);
         } else if ($this->matchArr['matchType']==='matchInt'){
             $this->matchArr['match']=$this->numberMatch($this->matchArr['value'],$toMatchValue,$this->matchArr['matchType']);
         } else if ($this->matchArr['matchType']==='matchFloat'){
             $this->matchArr['match']=$this->numberMatch($this->matchArr['value'],$toMatchValue,$this->matchArr['matchType']);
         } else if ($this->matchArr['matchType']==='stringChunks'){
             $this->matchArr['match']=$this->stringChunksMatch($this->matchArr['value'],$toMatchValue);
+        } else if ($this->matchArr['matchType']==='patent'){
+            $this->matchArr['match']=$this->patentMatch($this->matchArr['value'],$toMatchValue);
         } else if ($this->matchArr['matchType']==='unycom'){
             if ($this->matchArr['obj']->isValid()){
                 $this->matchArr['match']=$this->matchArr['obj']->match($toMatchValue);
@@ -149,15 +154,38 @@ final class MatchValues{
         return $this->matchArr['match']??0;
     }
 
+
+
+    private function patentNeedle($string):string
+    {
+        $result=['chunk'=>'','weight'=>0];
+        $chunks=preg_split(self::STRING_CHUNK_SEPARATOR_REGEX,$string);
+        foreach($chunks as $chunk){
+            $weight=count(count_chars($chunk,1));
+            if ($weight>$result['weight']){
+                $result=['chunk'=>$chunk,'weight'=>$weight];
+            }
+        }
+        return $result['chunk'];
+    }
+
+    private function patentMatch($stringA,$stringB):float|int
+    {
+        $stringA=preg_replace(self::STRING_CHUNK_SEPARATOR_REGEX,'',$stringA);
+        $stringB=preg_replace(self::STRING_CHUNK_SEPARATOR_REGEX,'',$stringB);
+        if ($stringA===$stringB){return 1;}
+        $matchType=(strlen($stringA)>5 && strlen($stringB)>5)?'correlationContain':'correlationMatch';
+        return $this->correlation($stringA,$stringB,$matchType);
+    }
+
     private function stringChunksMatch($stringA,$stringB):float|int
     {
-        $pattern='/[\{\}\[\]\(\)\'";,|\/\\\]+/';
         if (mb_strlen($stringA)>mb_strlen($stringB)){
             $testString=$stringB;
-            $chunks=preg_split($pattern,$stringA);
+            $chunks=preg_split(self::STRING_CHUNK_SEPARATOR_REGEX,$stringA);
         } else {
             $testString=$stringA;
-            $chunks=preg_split($pattern,$stringB);
+            $chunks=preg_split(self::STRING_CHUNK_SEPARATOR_REGEX,$stringB);
         }
         $matchCount=$count=0;
         foreach($chunks as $chunk){
@@ -186,7 +214,7 @@ final class MatchValues{
         return ($match<0)?0:$match;
     }
 
-    private function likeness($stringA,$stringB,$matchType):float|int
+    private function correlation($stringA,$stringB,$matchType):float|int
     {
         if ($stringA===$stringB){return 1;}
         $stringA=strval($stringA);
@@ -200,21 +228,22 @@ final class MatchValues{
         }
         $topLikeness=0;
         for($shift=0;$shift<count($chrsA);$shift++){
-            $likeness=0;
+            $correlation=0;
             foreach($chrsB as $indexB=>$chrB){
                 $indexA=$indexB+$shift;
                 if (isset($chrsA[$indexA])){
                     if ($chrsA[$indexA]===$chrB){
-                        $likeness++;
+                        $correlation++;
                     }
                 }
             }
-            if ($likeness>$topLikeness){
-                $topLikeness=$likeness;
+            if ($correlation>$topLikeness){
+                $topLikeness=$correlation;
             }
         }
-        return $topLikeness/(($matchType==='likenessMatch')?count($chrsA):count($chrsB));
+        return $topLikeness/(($matchType==='correlationMatch')?count($chrsA):count($chrsB));
     }
+    
 
 }
 ?>
