@@ -200,9 +200,7 @@ final class UNYCOM{
         $unycom['Family']=$unycom['Year'].'F'.$unycom['Number'];
         $unycom['Reference']=$unycom['Year'].$unycom['Type'].$unycom['Number'].$unycom['Region'].$unycom['Country'].$unycom['Part'];
         $unycom['Reference without \s']=preg_replace('/\s+/','',$unycom['Reference']);
-        if (!empty($unycom['Prefix'])){
-            $unycom['Full']=$unycom['Prefix'].' - '.$unycom['Reference'];
-        }
+        $unycom['Full']=(empty($unycom['Prefix']))?$unycom['Reference']:($unycom['Prefix'].' - '.$unycom['Reference']);
         $unycom['isValid']=TRUE;
         return $unycom;
     }
