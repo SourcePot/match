@@ -174,8 +174,7 @@ final class MatchValues{
         $stringA=preg_replace(self::STRING_CHUNK_SEPARATOR_REGEX,'',$stringA);
         $stringB=preg_replace(self::STRING_CHUNK_SEPARATOR_REGEX,'',$stringB);
         if ($stringA===$stringB){return 1;}
-        $matchType=(strlen($stringA)>5 && strlen($stringB)>5)?'correlationContain':'correlationMatch';
-        return $this->correlation($stringA,$stringB,$matchType);
+        return $this->correlation($stringA,$stringB,'correlationMatch');
     }
 
     private function stringChunksMatch($stringA,$stringB):float|int

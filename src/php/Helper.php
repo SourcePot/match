@@ -35,6 +35,9 @@ final class Helper{
         $html='<table>';
         $html.='<caption>'.$caption.'</caption>';
         foreach($arr as $key=>$value){
+            if (is_bool($value)){
+                $value=($value)?'TRUE':'FALSE';
+            }
             $html.='<tr><td>'.$key.'</td><td>'.$value.'</td></tr>';
         }
         $html.='</table>';        
