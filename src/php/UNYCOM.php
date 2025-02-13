@@ -151,6 +151,8 @@ final class UNYCOM{
         // get region, country, part
         $regionCountryPart=$caseComps[1];
         $unycom['Part']=preg_replace('/[^0-9]/','',$regionCountryPart);
+        $unycom['Part']=str_pad($unycom['Part'],2,"0", STR_PAD_LEFT);
+        $unycom['Part']=substr($unycom['Part'],0,2);
         $regionCountry=preg_replace('/[^A-Z]/','',$regionCountryPart);
         if (strlen($regionCountry)>2){
             // region and country

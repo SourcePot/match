@@ -23,7 +23,7 @@ $matchObj = new MatchValues();
 // compile html
 $html='<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta charset="utf-8"><title>Match</title><link type="text/css" rel="stylesheet" href="index.css"/></head>';
 $html.='<body><form name="892d183ba51083fc2a0b3d4d6453e20b" id="892d183ba51083fc2a0b3d4d6453e20b" method="post" enctype="multipart/form-data">';
-$html.='<h1>Evaluation Page for the Match-Package</h1>';
+$html.='<h1>Match Evaluation Page</h1>';
 $html.='<div class="control"><h2>Value A, Value B and Match-type setting</h2>';
 $html.='<input type="text" value="'.$valueA.'" name="valueA" id="valueA" style="margin:0.25em;"/>';
 $html.='<input type="text" value="'.$valueB.'" name="valueB" id="valueB" style="margin:0.25em;"/>';

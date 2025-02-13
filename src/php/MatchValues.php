@@ -154,8 +154,6 @@ final class MatchValues{
         return $this->matchArr['match']??0;
     }
 
-
-
     private function patentNeedle($string):string
     {
         $result=['chunk'=>'','weight'=>0];
