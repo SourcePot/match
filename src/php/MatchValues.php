@@ -166,6 +166,10 @@ final class MatchValues{
                 $result=['chunk'=>$chunk,'weight'=>$weight];
             }
         }
+        if (strlen($result['chunk'])>3){
+            $chunks=preg_split('/[A-Z]+/',$result['chunk']);
+            $result['chunk']=substr($chunks[0],-3);
+        }
         return $result['chunk'];
     }
 
