@@ -15,15 +15,20 @@ namespace SourcePot\Match;
 
 require_once('../../vendor/autoload.php');
 
-$matchObj = new MatchValues();  // create instance of match object
+// create an instance of match object
+$matchObj = new MatchValues(); 
 
-$matchObj->set('q2015P45527WEPL122','unycom'); // set the value you like to match with other values of a haystack and set match type
+// set the value you like to match with other values of a haystack and set match type
+$matchObj->set('q2015P45527WEPL122','unycom');
 
-$needle=$matchObj->prepareMatch();  // prepare the match, this will also return a needle, e.g. to filter entries from a database to create the haystack
+// prepare the match, this will also return a needle, e.g. to filter entries from a database to create the haystack
+$needle=$matchObj->prepareMatch();
 
-$match=$matchObj->match('2015P45527WE122'); // match with a value of the haystack, typically used in a loop. $match is a value in the range of 0...1
+// match with a value of the haystack, typically used in a loop. $match is a value in the range of 0...1
+$match=$matchObj->match('2015P45527WE122');
 
-$result=$matchObj->get();   // get all data with regard to the match, input values, needle, match type and match value
+// get all data with regard to the match as an array: input value, match value, needle, match type and match result
+$result=$matchObj->get();
 ```
 
 # Evaluation web page
