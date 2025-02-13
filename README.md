@@ -11,6 +11,8 @@ The following code examples require the namespace to be set to `namespace Source
 
 # Sample code
 ```
+<?php
+
 namespace SourcePot\Match;
 
 require_once('../../vendor/autoload.php');
@@ -29,6 +31,10 @@ $match=$matchObj->match('2015P45527WE122');
 
 // get all data with regard to the match as an array: input value, match value, needle, match type and match result
 $result=$matchObj->get();
+
+var_dump($result);
+
+?>
 ```
 
 # Evaluation web page
