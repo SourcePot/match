@@ -73,6 +73,10 @@ final class MatchValues{
             $dateTimeObj=$this->matchArr['obj']->get();
             $dateTimeObj->setTimezone(new \DateTimeZone(self::DB_TIMEZONE));
             return $dateTimeObj->format('Y-m-d').'%';
+        } else if ($this->matchArr['matchType']==='stringChunks'){
+            $chunks=preg_split(self::STRING_CHUNK_SEPARATOR_REGEX,$this->matchArr['value']);
+            $chunkIndex=intdiv(count($chunks),2);
+            return '%'.$chunks[$chunkIndex].'%';
         } else if ($this->matchArr['matchType']==='' || $this->matchArr['matchType']==='strpos'){
             return '%'.$this->matchArr['value'].'%';
         } else if ($this->matchArr['matchType']==='patent'){
