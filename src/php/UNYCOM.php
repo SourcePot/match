@@ -55,7 +55,7 @@ final class UNYCOM{
                                  'SN'=>'SENEGAL','RS'=>'SERBIA','SC'=>'SEYCHELLES','SL'=>'SIERRA LEONE','SG'=>'SINGAPORE','SX'=>'SINT MAARTEN (DUTCH PART)',
                                  'SK'=>'SLOVAKIA','SI'=>'SLOVENIA','SB'=>'SOLOMON ISLANDS','SO'=>'SOMALIA','ZA'=>'SOUTH AFRICA','GS'=>'SANDWICH ISLANDS','SS'=>'SOUTH SUDAN',
                                  'ES'=>'SPAIN','LK'=>'SRI LANKA','SD'=>'SUDAN','SR'=>'SURINAME','SE'=>'SWEDEN','CH'=>'SWITZERLAND','SY'=>'SYRIAN ARAB REPUBLIC',
-                                 'TW'=>'TAIWAN PROVINCE OF CHINA','TJ'=>'TAJIKISTAN','TH'=>'THAILAND','TL'=>'TIMOR-LESTE','TG'=>'TOGO','TO'=>'TONGA','TT'=>'TRINIDAD AND TOBAGO',
+                                 'TW'=>'TAIWAN','TJ'=>'TAJIKISTAN','TH'=>'THAILAND','TL'=>'TIMOR-LESTE','TG'=>'TOGO','TO'=>'TONGA','TT'=>'TRINIDAD AND TOBAGO',
                                  'TN'=>'TUNISIA','TR'=>'TÜRKIYE','TM'=>'TURKMENISTAN','TC'=>'TURKS AND CAICOS ISLANDS','TV'=>'TUVALU','UG'=>'UGANDA','UA'=>'UKRAINE',
                                  'AE'=>'UNITED ARAB EMIRATES','GB'=>'UNITED KINGDOM','TZ'=>'UNITED REPUBLIC OF TANZANIA','US'=>'UNITED STATES OF AMERICA','UY'=>'URUGUAY',
                                  'UZ'=>'UZBEKISTAN','VU'=>'VANUATU','VE'=>'VENEZUELA (BOLIVARIAN REPUBLIC OF)','VN'=>'VIET NAM','EH'=>'WESTERN SAHARA','YE'=>'YEMEN',
