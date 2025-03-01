@@ -65,7 +65,7 @@ final class UNYCOM{
     private const WEIGHTS=['Year'=>2,'Type'=>1,'Number'=>4,'Region'=>1,'Country'=>1,'Part'=>1];
     private const UNYCOM_TEMPLATE=['String'=>'','isValid'=>FALSE,'Year'=>'    ','Type'=>' ','Number'=>'     ','Region'=>'  ','Country'=>'  ','Part'=>'  ','Family'=>' ','Reference'=>'','Full'=>''];
 
-    public const UNYCOM_REGEX='/([0-9]{4})([ ]{0,1}[A-Z]{1,2})([0-9]{5})([A-Z ]{0,5})([0-9]{0,2})\s/u';
+    public const UNYCOM_REGEX='/(([A-Z]{3,5}[0-9\-abPCFS]{0,3} - ){0,1})([0-9]{4})([ ]{0,1}[A-Z]{1,2})([0-9]{5})([A-Z ]{0,5})([0-9]{0,2})\s/u';
 
     private $unycom=self::UNYCOM_TEMPLATE;
 
