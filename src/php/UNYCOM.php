@@ -65,7 +65,7 @@ final class UNYCOM{
     private const WEIGHTS=['Year'=>2,'Type'=>1,'Number'=>4,'Region'=>1,'Country'=>1,'Part'=>1];
     private const UNYCOM_TEMPLATE=['String'=>'','isValid'=>FALSE,'Year'=>'    ','Type'=>' ','Number'=>'     ','Region'=>'  ','Country'=>'  ','Part'=>'  ','Family'=>' ','Reference'=>'','Full'=>''];
 
-    public const UNYCOM_REGEX='/(([A-Z]{3,5}[0-9\-abPCFS]{0,3} - ){0,1})([0-9]{4})([ ]{0,1}[A-Z]{1,2})([0-9]{5})([A-Z ]{0,5})([0-9]{0,2})\s/u';
+    public const UNYCOM_REGEX='/(([A-Z]{3,5}[ ]{0,1}[0-9\-abPCFS]{0,3} [\-\–\—] ){0,1})([0-9]{4})([ ]{0,1}[A-Z]{1,2})([0-9]{5})([A-Z ]{0,5})([0-9]{0,2})\s/u';
 
     private $unycom=self::UNYCOM_TEMPLATE;
 
@@ -157,7 +157,7 @@ final class UNYCOM{
         if (strlen($unycom['Year'])===2){$unycom['Year']='19'.$unycom['Year'];}
         // get prefix
         $unycom['Prefix']=str_replace($match[0],'',$caseComps[0]);
-        $unycom['Prefix']=trim($unycom['Prefix'],' -');
+        $unycom['Prefix']=trim($unycom['Prefix'],' -–—');
         // get region, country, part
         $regionCountryPart=$caseComps[1];
         $unycom['Part']=preg_replace('/[^0-9]/','',$regionCountryPart);
