@@ -160,27 +160,36 @@ final class MatchValues{
 
     private function patentNeedle($string):string
     {
-        $result=['chunk'=>'','weight'=>0];
-        $chunks=preg_split(self::STRING_CHUNK_SEPARATOR_REGEX,$string);
-        foreach($chunks as $chunk){
-            $weight=count(count_chars($chunk,1));
-            if ($weight>$result['weight']){
-                $result=['chunk'=>$chunk,'weight'=>$weight];
-            }
-        }
-        if (strlen($result['chunk'])>3){
-            $chunks=preg_split('/[A-Z]+/',$result['chunk']);
-            $result['chunk']=substr($chunks[0],-3);
-        }
-        return $result['chunk'];
+        preg_match('/[0-9\, \/]{3,}/',$string,$match);
+        $string=preg_replace('/[^0-9]+/','',$match[0]);
+        return substr($string,-3);
     }
 
     private function patentMatch($stringA,$stringB):float|int
     {
-        $stringA=preg_replace(self::STRING_CHUNK_SEPARATOR_REGEX,'',$stringA);
-        $stringB=preg_replace(self::STRING_CHUNK_SEPARATOR_REGEX,'',$stringB);
-        if ($stringA===$stringB){return 1;}
-        return $this->correlation($stringA,$stringB,'correlationMatch');
+        // extract string A components
+        preg_match_all('/([A-Z]{2})[^A-Z]/',$stringA,$matchesA);
+        $matchesA=array_pop($matchesA);
+        $ccA=array_pop($matchesA)??'';
+        preg_match('/[0-9\, \/]{3,}/',$stringA,$matchA);
+        $numberA=preg_replace('/[^0-9]+/','',$matchA[0]);
+        // extract string B components
+        preg_match_all('/([A-Z]{2})[^A-Z]/',$stringB,$matchesB);
+        $matchesB=array_pop($matchesB);
+        $ccB=array_pop($matchesB)??'';
+        preg_match('/[0-9\, \/]{3,}/',$stringB,$matchB);
+        $numberB=preg_replace('/[^0-9]+/','',$matchB[0]);
+        // country code match
+        if ($ccA == $ccB){
+            $ccAmatch=1;
+        } else if ((empty($ccA) && !empty($ccB)) || (!empty($ccA) && empty($ccB))){
+            $ccAmatch=0.8;
+        } else {
+            $ccAmatch=0;
+        }
+        // number match
+        $numberMatch=$this->correlation($numberA,$numberB,'correlationMatch');
+        return ($ccAmatch+$numberMatch)/2;
     }
 
     private function stringChunksMatch($stringA,$stringB):float|int
