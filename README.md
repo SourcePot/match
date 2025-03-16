@@ -39,6 +39,12 @@ var_dump($result);
 # Match types
 
 ## Identical
+
+| Test value  | Heystack value | Result |
+| ------------- | ------------- | ------------- |
+| 100095646\chä6477/测试,用例(Hallo)Test | 100095646\chä6477/测试,用例(Hallo)Test | 1 |
+| 100095646\ch6477/测试,用例(Hallo)Test | 100095646\chä6477/测试,用例(Hallo)Test | 0 |
+
 ## Contains / Contains (ci)
 ## Does not contain / Does not contain (ci)
 ## Correlation contains / Correlation match
@@ -47,7 +53,7 @@ var_dump($result);
 ## String chunk match (middle chunk as needle)
 ## Patent case
 ## UNYCOM case
-## DateTime'
+## DateTime
 
 # Evaluation web page
 
