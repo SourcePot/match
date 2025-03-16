@@ -54,8 +54,39 @@ var_dump($result);
 | 100095646\chä6477/测试,用例 | 100095646\chä6477/测试,用例(Hallo)Test | 1 |
 
 ## Does not contain / Does not contain (ci)
-## Correlation contains / Correlation match
+
+| Test value  | Heystack value | Result |
+| ------------- | ------------- | ------------- |
+| 100095646\chä6477/测试,用例(Hallo)Test | 100095646\chä6477/测试,用例(Hallo)Test | 0 |
+| 100095646\ch6477/测试,用例(Hallo)Test | 100095646\chä6477/测试,用例(Hallo)Test | 1 |
+| 100095646\chä6477/测试,用例 | 100095646\chä6477/测试,用例(Hallo)Test | 0 |
+
+## Correlation contains
+
+| Test value  | Heystack value | Result |
+| ------------- | ------------- | ------------- |
+| 100095646\chä6477/测试,用例(Hallo)Test | 100095646\chä6477/测试,用例(Hallo)Test | 1 |
+| 100095646\ch6477/测试,用例(Hallo)Test | 100095646\chä6477/测试,用例(Hallo)Test | 0.6969696969697 |
+| 100095646\chä6477/测试,用例 | 100095646\chä6477/测试,用例(Hallo)Test | 1 |
+
+# Correlation match
+
+| Test value  | Heystack value | Result |
+| ------------- | ------------- | ------------- |
+| 100095646\chä6477/测试,用例(Hallo)Test | 100095646\chä6477/测试,用例(Hallo)Test | 1 |
+| 100095646\chrt477/测试,用例(Hallo)Test | 100095646\chä6477/测试,用例(Hallo)Test | 0.94117647058824 |
+| 100095646\ch6477/测试,用例(Hallo)Test | 100095646\chä6477/测试,用例(Hallo)Test | 0.67647058823529 |
+| 100095646\chä6477/测试,用例 | 100095646\chä6477/测试,用例(Hallo)Test | 0.67647058823529 |
+
 ## Integer match
+
+| Test value  | Heystack value | Result |
+| ------------- | ------------- | ------------- |
+| 100095646 | 100095646 | 1 |
+| 100095647 | 100095646 | 0.99999999000956 |
+| 200095647 | 100095646 | 0.50023899820269 |
+| 1 | 100095646 | 0 |
+
 ## Float match
 ## String chunk match (middle chunk as needle)
 ## Patent case
