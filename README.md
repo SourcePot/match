@@ -36,6 +36,18 @@ var_dump($result);
 
 ?>
 ```
+# Match types
+
+## Identical
+## Contains / Contains (ci)
+## Does not contain / Does not contain (ci)
+## Correlation contains / Correlation match
+## Integer match
+## Float match
+## String chunk match (middle chunk as needle)
+## Patent case
+## UNYCOM case
+## DateTime'
 
 # Evaluation web page
 
