@@ -46,6 +46,13 @@ var_dump($result);
 | 100095646\ch6477/测试,用例(Hallo)Test | 100095646\chä6477/测试,用例(Hallo)Test | 0 |
 
 ## Contains / Contains (ci)
+
+| Test value  | Heystack value | Result |
+| ------------- | ------------- | ------------- |
+| 100095646\chä6477/测试,用例(Hallo)Test | 100095646\chä6477/测试,用例(Hallo)Test | 1 |
+| 100095646\ch6477/测试,用例(Hallo)Test | 100095646\chä6477/测试,用例(Hallo)Test | 0 |
+| 100095646\chä6477/测试,用例 | 100095646\chä6477/测试,用例(Hallo)Test | 1 |
+
 ## Does not contain / Does not contain (ci)
 ## Correlation contains / Correlation match
 ## Integer match
