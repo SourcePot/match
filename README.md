@@ -88,6 +88,14 @@ var_dump($result);
 | 1 | 100095646 | 0 |
 
 ## Float match
+
+| Test value  | Heystack value | Result |
+| ------------- | ------------- | ------------- |
+| 1.45434 | 1.454,34e-3 | 1 |
+| 1.45435 | 1.454,34e-3 | 0.99999312407605 |
+| 14.5434 | 1.454,34e-3 | 0.1 |
+| 145.434 | 1.454,34e-3 | 0.01 |
+
 ## String chunk match (middle chunk as needle)
 ## Patent case
 ## UNYCOM case
