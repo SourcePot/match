@@ -123,12 +123,14 @@ var_dump($result);
 > [!NOTE]  
 > The needle will be based on the database timezone. 
 
-If date and time match the result will be 1, if only date or time matches, the result will be 0.5 and there is no date and no time match.
+If the date and the time match, the result will be 1. If the date does not match, the result will be 0. If the date matches but the time does not, the result will be <1 and >0.
 
 | Test value  | Heystack value | Needle | Result |
 | ------------- | ------------- | ------------- | ------------- |
-| 2023-07-13 | July 13, 2023 | 2023-07-12% | 1 |
-| 2023-07-11 | July 13, 2023 | 2023-07-10% | 0 |
+| 2023-07-13 | July 13, 2023 | 2023-07-13% | 1 |
+| 2023-07-13 | July 13, 2023 2.00pm | 2023-07-13% | 0.91666666666667 |
+| 2023-07-11 | July 13, 2023 2.00pm | 2023-07-11% | 0 |
+| 2023-07-11 12:00:00 (Europe/London) | 2023-07-11 13:00:00 (Europe/Berlin) | 2023-07-11% | 1 |
 
 # Evaluation web page
 
