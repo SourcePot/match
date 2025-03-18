@@ -120,8 +120,8 @@ var_dump($result);
 
 ## DateTime
 
-[!NOTE]  
-The needle will be based on the database timezone. 
+> [!NOTE]  
+> The needle will be based on the database timezone. 
 
 If date and time match the result will be 1, if only date or time matches, the result will be 0.5 and there is no date and no time match.
 
