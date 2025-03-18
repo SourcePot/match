@@ -38,6 +38,9 @@ var_dump($result);
 ```
 # Match types
 
+> [!CAUTION]
+> The actual match values might depend on the version of this package and related packages.
+
 ## Identical
 
 | Test value  | Heystack value | Result |
@@ -130,7 +133,7 @@ If the date and the time match, the result will be 1. If the date does not match
 | 2023-07-13 | July 13, 2023 | 2023-07-13% | 1 |
 | 2023-07-13 | July 13, 2023 2.00pm | 2023-07-13% | 0.91666666666667 |
 | 2023-07-11 | July 13, 2023 2.00pm | 2023-07-11% | 0 |
-| 2023-07-11 12:00:00 (Europe/London) | 2023-07-11 13:00:00 (Europe/Berlin) | 2023-07-11% | 1 |
+| 2023-07-11 12:00:00 (Europe/London) | 2023-07-11 1.00pm (Europe/Berlin) | 2023-07-11% | 1 |
 
 # Evaluation web page
 
