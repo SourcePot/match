@@ -98,7 +98,7 @@ var_dump($result);
 
 ## String chunk match (middle chunk as needle)
 | Test value  | Heystack value | Needle | Result |
-| ------------- | ------------- | ------------- |
+| ------------- | ------------- | ------------- | ------------- |
 | 2024-11-23;72661;ABCDEF | 2024-11-23;72661;ABCDEF | %72661% | 1 |
 | 2024-11-22;72661;ABCDEF | 2024-11-23;72661;ABCDEF | %72661% | 0.66666666666667 |
 | 2024-11-23;72660;ABCDEF | 2024-11-23;72661;ABCDEF | %72660% | 0.66666666666667 |
@@ -108,7 +108,7 @@ var_dump($result);
 ## Patent case
 
 | Test value  | Heystack value | Needle | Result |
-| ------------- | ------------- | ------------- |
+| ------------- | ------------- | ------------- | ------------- |
 | PCT/EP2009/055033 | PCT/EP2009/055033 | %033% | 1 |
 | PCT/EP09/055033 | PCT/EP2009/055033 | %033% | 0.9 |
 | 09733996 | 09733996.4 | %996% | 1 |
@@ -126,7 +126,7 @@ The needle will be based on the database timezone.
 If date and time match the result will be 1, if only date or time matches, the result will be 0.5 and there is no date and no time match.
 
 | Test value  | Heystack value | Needle | Result |
-| ------------- | ------------- | ------------- |
+| ------------- | ------------- | ------------- | ------------- |
 | 2023-07-13 | July 13, 2023 | 2023-07-12% | 1 |
 | 2023-07-11 | July 13, 2023 | 2023-07-10% | 0 |
 
