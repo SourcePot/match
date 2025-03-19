@@ -4,14 +4,15 @@ The PHP classes in this repository allow complex data values such as patent numb
 
 You can use Packagist to install the package on a web server or your local computer, e.g. *Command Prompt*, enter `composer create-project sourcepot/asset {add your target directory here}`. 
 
-The following code examples require the namespace to be set to `namespace SourcePot\Match;`.
-
 ## Features
 - Simple and complex value matches, from simple string contain to UNYCOM cases
 - Extraction of a 'needles' from the input value used to pre-filter database entries and create a haystack
 - Returns a match probability 0...1 for the input value compared with entries of the haystack
 
 # Sample code
+
+In the following example source code the UNYCOM case number “2015P45527WEPL122” is extracted from the string “q2015P45527WEPL12” and loaded to the match object as the match value for a UNYCOM match. 
+
 ```
 <?php
 
@@ -28,7 +29,7 @@ $matchObj->set('q2015P45527WEPL122','unycom');
 // prepare the match, this will also return a needle, e.g. to filter entries from a database to create the haystack
 $needle=$matchObj->prepareMatch();
 
-// match with a value of the haystack, typically used in a loop. $match is a value in the range of 0...1
+// match with a value of the haystack, typically used in a loop. $match is the match probability in the range of 0...1 
 $match=$matchObj->match('2015P45527WE122');
 
 // get all data with regard to the match as an array: input value, match value, needle, match type and match result
@@ -38,6 +39,9 @@ var_dump($result);
 
 ?>
 ```
+
+`$result` is an array `['value'=>'2015P45527WE122','matchType'=>'unycom','obj'=>'2015P45527WE 12','toMatchValue'=>'q2015P45527WEPL122','match'=>0.9,'needle'=>'%45527%']`
+
 # Match types
 
 > [!CAUTION]
