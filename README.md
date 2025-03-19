@@ -35,7 +35,15 @@ $match=$matchObj->match('2015P45527WE122');
 // get all data with regard to the match as an array: input value, match value, needle, match type and match result
 $result=$matchObj->get();
 
-// $result is ['value'=>'2015P45527WE122','matchType'=>'unycom','obj'=>'2015P45527WE 12','toMatchValue'=>'q2015P45527WEPL122','match'=>0.9,'needle'=>'%45527%']
+/* $result is 
+  ['value'=>'2015P45527WE122',
+   'matchType'=>'unycom',
+   'obj'=>'2015P45527WE 12',
+   'toMatchValue'=>'q2015P45527WEPL122',
+   'match'=>0.9,
+   'needle'=>'%45527%'
+   ]
+*/
 var_dump($result);
 
 ?>
