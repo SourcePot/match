@@ -70,7 +70,7 @@ The following example uses strings whose sub-strings or components are separated
 
 For this match, the patent or application number is broken down into two components: Country code and property right number. A check digit is ignored and a possible year is accepted with 2 or 4 digits, e.g. 09 == 2009 == 1909 etc.
 
-Example: EP 2009 716 604.5 → Country code: `EP` and Naumber: `09716604` 
+Example: EP **20**09 716 604 **.5** → Country code: `EP` and Number: `09716604` 
 
 
 | haystack value  | to match value | needle | match |
