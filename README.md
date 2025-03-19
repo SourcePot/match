@@ -116,7 +116,7 @@ var_dump($result);
 | 14.5434 | 1.454,34e-3 | 0.1 |
 | 145.434 | 1.454,34e-3 | 0.01 |
 
-## String chunk match (middle chunk as needle)
+## String chunk match
 
 The following example uses strings whose sub-strings or components are separated by semicolons. Possible separators are defined by the regular expression `[\{\}\[\]\(\)\'";,|\/\\.\s]+`, which is defined as a constant. The middle sub-string is used as needle.
 
