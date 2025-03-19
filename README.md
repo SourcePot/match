@@ -54,68 +54,6 @@ var_dump($result);
 > [!CAUTION]
 > The actual match result values might depend on the version of this package and related packages.
 
-## Identical
-
-| haystack value  | to match value | match |
-| ------------- | ------------- | ------------- |
-| 100095646\chä6477/测试,用例(Hallo)Test | 100095646\chä6477/测试,用例(Hallo)Test | 1 |
-| 100095646\ch6477/测试,用例(Hallo)Test | 100095646\chä6477/测试,用例(Hallo)Test | 0 |
-
-## Contains / Contains (ci)
-
-`(ci)` is the case insensitive match type.
-
-| haystack value  | to match value | match |
-| ------------- | ------------- | ------------- |
-| 100095646\chä6477/测试,用例(Hallo)Test | 100095646\chä6477/测试,用例(Hallo)Test | 1 |
-| 100095646\ch6477/测试,用例(Hallo)Test | 100095646\chä6477/测试,用例(Hallo)Test | 0 |
-| 100095646\chä6477/测试,用例 | 100095646\chä6477/测试,用例(Hallo)Test | 1 |
-
-## Does not contain / Does not contain (ci)
-
-`(ci)` is the case insensitive match type.
-
-| haystack value  | to match value | match |
-| ------------- | ------------- | ------------- |
-| 100095646\chä6477/测试,用例(Hallo)Test | 100095646\chä6477/测试,用例(Hallo)Test | 0 |
-| 100095646\ch6477/测试,用例(Hallo)Test | 100095646\chä6477/测试,用例(Hallo)Test | 1 |
-| 100095646\chä6477/测试,用例 | 100095646\chä6477/测试,用例(Hallo)Test | 0 |
-
-## Correlation contains
-
-| haystack value  | to match value | match |
-| ------------- | ------------- | ------------- |
-| 100095646\chä6477/测试,用例(Hallo)Test | 100095646\chä6477/测试,用例(Hallo)Test | 1 |
-| 100095646\ch6477/测试,用例(Hallo)Test | 100095646\chä6477/测试,用例(Hallo)Test | 0.6969696969697 |
-| 100095646\chä6477/测试,用例 | 100095646\chä6477/测试,用例(Hallo)Test | 1 |
-
-## Correlation match
-
-| haystack value  | to match value | match |
-| ------------- | ------------- | ------------- |
-| 100095646\chä6477/测试,用例(Hallo)Test | 100095646\chä6477/测试,用例(Hallo)Test | 1 |
-| 100095646\ch6477/测试,用例(Hallo)Test | 100095646\chä6477/测试,用例(Hallo)Test | 0.67647058823529 |
-| 100095646\chrt477/测试,用例(Hallo)Test | 100095646\chä6477/测试,用例(Hallo)Test | 0.94117647058824 |
-| 100095646\chä6477/测试,用例 | 100095646\chä6477/测试,用例(Hallo)Test | 0.67647058823529 |
-
-## Integer match
-
-| haystack value  | to match value | match |
-| ------------- | ------------- | ------------- |
-| 100095646 | 100095646 | 1 |
-| 100095647 | 100095646 | 0.99999999000956 |
-| 200095647 | 100095646 | 0.50023899820269 |
-| 1 | 100095646 | 0 |
-
-## Float match
-
-| haystack value  | to match value | match |
-| ------------- | ------------- | ------------- |
-| 1.45434 | 1.454,34e-3 | 1 |
-| 1.45435 | 1.454,34e-3 | 0.99999312407605 |
-| 14.5434 | 1.454,34e-3 | 0.1 |
-| 145.434 | 1.454,34e-3 | 0.01 |
-
 ## String chunk match
 
 The following example uses strings whose sub-strings or components are separated by semicolons. Possible separators are defined by the regular expression `[\{\}\[\]\(\)\'";,|\/\\.\s]+`, which is defined as a constant. The middle sub-string is used as needle.
@@ -179,6 +117,68 @@ If the date and the time match, the result will be 1. If the date does not match
 | 2023-07-13 | July 13, 2023 2.00pm | 2023-07-13% | 0.91666666666667 |
 | 2023-07-11 | July 13, 2023 2.00pm | 2023-07-11% | 0 |
 | 2023-07-11 12:00:00 (Europe/London) | 2023-07-11 1.00pm (Europe/Berlin) | 2023-07-11% | 1 |
+
+## Identical
+
+| haystack value  | to match value | match |
+| ------------- | ------------- | ------------- |
+| 100095646\chä6477/测试,用例(Hallo)Test | 100095646\chä6477/测试,用例(Hallo)Test | 1 |
+| 100095646\ch6477/测试,用例(Hallo)Test | 100095646\chä6477/测试,用例(Hallo)Test | 0 |
+
+## Contains / Contains (ci)
+
+`(ci)` is the case insensitive match type.
+
+| haystack value  | to match value | match |
+| ------------- | ------------- | ------------- |
+| 100095646\chä6477/测试,用例(Hallo)Test | 100095646\chä6477/测试,用例(Hallo)Test | 1 |
+| 100095646\ch6477/测试,用例(Hallo)Test | 100095646\chä6477/测试,用例(Hallo)Test | 0 |
+| 100095646\chä6477/测试,用例 | 100095646\chä6477/测试,用例(Hallo)Test | 1 |
+
+## Does not contain / Does not contain (ci)
+
+`(ci)` is the case insensitive match type.
+
+| haystack value  | to match value | match |
+| ------------- | ------------- | ------------- |
+| 100095646\chä6477/测试,用例(Hallo)Test | 100095646\chä6477/测试,用例(Hallo)Test | 0 |
+| 100095646\ch6477/测试,用例(Hallo)Test | 100095646\chä6477/测试,用例(Hallo)Test | 1 |
+| 100095646\chä6477/测试,用例 | 100095646\chä6477/测试,用例(Hallo)Test | 0 |
+
+## Correlation contains
+
+| haystack value  | to match value | match |
+| ------------- | ------------- | ------------- |
+| 100095646\chä6477/测试,用例(Hallo)Test | 100095646\chä6477/测试,用例(Hallo)Test | 1 |
+| 100095646\ch6477/测试,用例(Hallo)Test | 100095646\chä6477/测试,用例(Hallo)Test | 0.6969696969697 |
+| 100095646\chä6477/测试,用例 | 100095646\chä6477/测试,用例(Hallo)Test | 1 |
+
+## Correlation match
+
+| haystack value  | to match value | match |
+| ------------- | ------------- | ------------- |
+| 100095646\chä6477/测试,用例(Hallo)Test | 100095646\chä6477/测试,用例(Hallo)Test | 1 |
+| 100095646\ch6477/测试,用例(Hallo)Test | 100095646\chä6477/测试,用例(Hallo)Test | 0.67647058823529 |
+| 100095646\chrt477/测试,用例(Hallo)Test | 100095646\chä6477/测试,用例(Hallo)Test | 0.94117647058824 |
+| 100095646\chä6477/测试,用例 | 100095646\chä6477/测试,用例(Hallo)Test | 0.67647058823529 |
+
+## Integer match
+
+| haystack value  | to match value | match |
+| ------------- | ------------- | ------------- |
+| 100095646 | 100095646 | 1 |
+| 100095647 | 100095646 | 0.99999999000956 |
+| 200095647 | 100095646 | 0.50023899820269 |
+| 1 | 100095646 | 0 |
+
+## Float match
+
+| haystack value  | to match value | match |
+| ------------- | ------------- | ------------- |
+| 1.45434 | 1.454,34e-3 | 1 |
+| 1.45435 | 1.454,34e-3 | 0.99999312407605 |
+| 14.5434 | 1.454,34e-3 | 0.1 |
+| 145.434 | 1.454,34e-3 | 0.01 |
 
 # Evaluation web page
 
