@@ -56,7 +56,7 @@ var_dump($result);
 
 ## Identical
 
-| Test value  | Heystack value | Result |
+| Test value  | Heystack value | match |
 | ------------- | ------------- | ------------- |
 | 100095646\chä6477/测试,用例(Hallo)Test | 100095646\chä6477/测试,用例(Hallo)Test | 1 |
 | 100095646\ch6477/测试,用例(Hallo)Test | 100095646\chä6477/测试,用例(Hallo)Test | 0 |
@@ -65,7 +65,7 @@ var_dump($result);
 
 `(ci)` is the case insensitive match type.
 
-| Test value  | Heystack value | Result |
+| Test value  | Heystack value | match |
 | ------------- | ------------- | ------------- |
 | 100095646\chä6477/测试,用例(Hallo)Test | 100095646\chä6477/测试,用例(Hallo)Test | 1 |
 | 100095646\ch6477/测试,用例(Hallo)Test | 100095646\chä6477/测试,用例(Hallo)Test | 0 |
@@ -75,7 +75,7 @@ var_dump($result);
 
 `(ci)` is the case insensitive match type.
 
-| Test value  | Heystack value | Result |
+| Test value  | Heystack value | match |
 | ------------- | ------------- | ------------- |
 | 100095646\chä6477/测试,用例(Hallo)Test | 100095646\chä6477/测试,用例(Hallo)Test | 0 |
 | 100095646\ch6477/测试,用例(Hallo)Test | 100095646\chä6477/测试,用例(Hallo)Test | 1 |
@@ -83,7 +83,7 @@ var_dump($result);
 
 ## Correlation contains
 
-| Test value  | Heystack value | Result |
+| Test value  | Heystack value | match |
 | ------------- | ------------- | ------------- |
 | 100095646\chä6477/测试,用例(Hallo)Test | 100095646\chä6477/测试,用例(Hallo)Test | 1 |
 | 100095646\ch6477/测试,用例(Hallo)Test | 100095646\chä6477/测试,用例(Hallo)Test | 0.6969696969697 |
@@ -91,7 +91,7 @@ var_dump($result);
 
 ## Correlation match
 
-| Test value  | Heystack value | Result |
+| Test value  | Heystack value | match |
 | ------------- | ------------- | ------------- |
 | 100095646\chä6477/测试,用例(Hallo)Test | 100095646\chä6477/测试,用例(Hallo)Test | 1 |
 | 100095646\ch6477/测试,用例(Hallo)Test | 100095646\chä6477/测试,用例(Hallo)Test | 0.67647058823529 |
@@ -100,7 +100,7 @@ var_dump($result);
 
 ## Integer match
 
-| Test value  | Heystack value | Result |
+| Test value  | Heystack value | match |
 | ------------- | ------------- | ------------- |
 | 100095646 | 100095646 | 1 |
 | 100095647 | 100095646 | 0.99999999000956 |
@@ -109,7 +109,7 @@ var_dump($result);
 
 ## Float match
 
-| Test value  | Heystack value | Result |
+| Test value  | Heystack value | match |
 | ------------- | ------------- | ------------- |
 | 1.45434 | 1.454,34e-3 | 1 |
 | 1.45435 | 1.454,34e-3 | 0.99999312407605 |
@@ -117,7 +117,7 @@ var_dump($result);
 | 145.434 | 1.454,34e-3 | 0.01 |
 
 ## String chunk match (middle chunk as needle)
-| Test value  | Heystack value | Needle | Result |
+| Test value  | Heystack value | needle | match |
 | ------------- | ------------- | ------------- | ------------- |
 | 2024-11-23;72661;ABCDEF | 2024-11-23;72661;ABCDEF | %72661% | 1 |
 | 2024-11-22;72661;ABCDEF | 2024-11-23;72661;ABCDEF | %72661% | 0.66666666666667 |
@@ -132,7 +132,7 @@ For this match, the patent or application number is broken down into two compone
 Example: EP 2009 716 604.5 → Country code: `EP` and Naumber: `09716604` 
 
 
-| Test value  | Heystack value | Needle | Result |
+| Test value  | Heystack value | needle | match |
 | ------------- | ------------- | ------------- | ------------- |
 | PCT/EP2009/055033 | PCT/EP2009/055033 | %033% | 1 |
 | PCT/EP09/055033 | PCT/EP2009/055033 | %033% | 1 |
@@ -149,7 +149,7 @@ Example: EP 2009 716 604.5 → Country code: `EP` and Naumber: `09716604`
 
 A weight is assigned to each of the components of the UNYCOM case number (year, file type, number, region, country and part). The weights are defined as constants in the `SourcePot\Match\UNYCOM` class and can be customised to your own requirements.
 
-| Test value  | Heystack value | Needle | Result |
+| Test value  | Heystack value | needle | match |
 | ------------- | ------------- | ------------- | ------------- |
 | 2009P53143WECZ03 | 2009P53143WECZ03 | %53143% | 1 |
 | 2019P53143WECZ03 | 2009P53143WECZ03 | %53143% | 0.8 |
@@ -170,7 +170,7 @@ A weight is assigned to each of the components of the UNYCOM case number (year, 
 
 If the date and the time match, the result will be 1. If the date does not match, the result will be 0. If the date matches but the time does not, the result will be <1 and >0.
 
-| Test value  | Heystack value | Needle | Result |
+| Test value  | Heystack value | needle | match |
 | ------------- | ------------- | ------------- | ------------- |
 | 2023-07-13 | July 13, 2023 | 2023-07-13% | 1 |
 | 2023-07-13 | July 13, 2023 2.00pm | 2023-07-13% | 0.91666666666667 |
