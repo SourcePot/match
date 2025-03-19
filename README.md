@@ -23,7 +23,7 @@ require_once('../../vendor/autoload.php');
 // create an instance of class MatchValues
 $matchObj = new MatchValues(); 
 
-// set the value you like to match with other values of a haystack and set match type
+// set the value you want to match with other values, e.g. of a haystack and set match type
 $matchObj->set('q2015P45527WEPL122','unycom');
 
 // prepare the match, this will also return a needle, e.g. to filter entries from a database to create the haystack
