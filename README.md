@@ -118,7 +118,7 @@ var_dump($result);
 
 ## String chunk match (middle chunk as needle)
 
-The following example uses strings whose sub-strings or components are separated by semicolons. Possible separators are defined by the regular expression `[\{\}\[\]\(\)\'";,|\/\\.\s]+`, which is defined as a constant.
+The following example uses strings whose sub-strings or components are separated by semicolons. Possible separators are defined by the regular expression `[\{\}\[\]\(\)\'";,|\/\\.\s]+`, which is defined as a constant. The middle sub-string is used as needle.
 
 | haystack value  | to match value | needle | match |
 | ------------- | ------------- | ------------- | ------------- |
