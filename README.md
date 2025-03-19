@@ -1,4 +1,4 @@
-The PHP classes in this repository allow complex data values such as patent numbers, dates and times etc. to be matched. To do gthis, in a first step the data value to be compared with as well as the match type needs to be laoded. After this the match is prepared. Depending on the match type, a needle is generated for database pre-filtering to create a haystack of data values from a database. In the last step the matches are performed between the initially loaded data value and the haystack values. Each match provides a match probability in the range 0...1, with 1 → complete match and 0 → no match.
+The PHP classes in this repository allow complex data values such as patent numbers, dates and times etc. to be matched. In order to do this, in a first step the data value to be compared with as well as the match type needs to be loaded. After this the match is prepared. Depending on the match type, a needle is generated for database pre-filtering to create a haystack of data values from a database. In the last step the matches are performed between the initially loaded data value and the haystack values. Each match provides a match probability in the range 0...1, with 1 → complete match and 0 → no match.
 
 # Installation
 
@@ -120,27 +120,27 @@ If the date and the time match, the result will be 1. If the date does not match
 
 ## Identical
 
-| haystack value  | to match value | match |
-| ------------- | ------------- | ------------- |
-| 100095646\chä6477/测试,用例(Hallo)Test | 100095646\chä6477/测试,用例(Hallo)Test | 1 |
-| 100095646\ch6477/测试,用例(Hallo)Test | 100095646\chä6477/测试,用例(Hallo)Test | 0 |
+| haystack value  | to match value | needle | match |
+| ------------- | ------------- | ------------- | ------------- |
+| 100095646\chä6477/测试,用例(Hallo)Test | 100095646\chä6477/测试,用例(Hallo)Test | %100095646\chä6477/测试,用例(Hallo)Test% | 1 |
+| 100095646\ch6477/测试,用例(Hallo)Test | 100095646\chä6477/测试,用例(Hallo)Test | %100095646\chä6477/测试,用例(Hallo)Test% | 0 |
 
 ## Contains / Contains (ci)
 
 `(ci)` is the case insensitive match type.
 
-| haystack value  | to match value | match |
-| ------------- | ------------- | ------------- |
-| 100095646\chä6477/测试,用例(Hallo)Test | 100095646\chä6477/测试,用例(Hallo)Test | 1 |
-| 100095646\ch6477/测试,用例(Hallo)Test | 100095646\chä6477/测试,用例(Hallo)Test | 0 |
-| 100095646\chä6477/测试,用例 | 100095646\chä6477/测试,用例(Hallo)Test | 1 |
+| haystack value  | to match value | needle | match |
+| ------------- | ------------- | ------------- | ------------- |
+| 100095646\chä6477/测试,用例(Hallo)Test | 100095646\chä6477/测试,用例(Hallo)Test | %ä6477/测试,用% | 1 |
+| 100095646\ch6477/测试,用例(Hallo)Test | 100095646\chä6477/测试,用例(Hallo)Test | %ä6477/测试,用% | 0 |
+| 100095646\chä6477/测试,用例 | 100095646\chä6477/测试,用例(Hallo)Test | %ä6477/测试,用% | 1 |
 
 ## Does not contain / Does not contain (ci)
 
 `(ci)` is the case insensitive match type.
 
-| haystack value  | to match value | match |
-| ------------- | ------------- | ------------- |
+| haystack value  | to match value | needle | match |
+| ------------- | ------------- | ------------- | ------------- |
 | 100095646\chä6477/测试,用例(Hallo)Test | 100095646\chä6477/测试,用例(Hallo)Test | 0 |
 | 100095646\ch6477/测试,用例(Hallo)Test | 100095646\chä6477/测试,用例(Hallo)Test | 1 |
 | 100095646\chä6477/测试,用例 | 100095646\chä6477/测试,用例(Hallo)Test | 0 |

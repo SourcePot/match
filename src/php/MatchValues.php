@@ -77,8 +77,13 @@ final class MatchValues{
             $chunks=preg_split(self::STRING_CHUNK_SEPARATOR_REGEX,$this->matchArr['value']);
             $chunkIndex=intdiv(count($chunks),2);
             return '%'.$chunks[$chunkIndex].'%';
-        } else if ($this->matchArr['matchType']==='' || $this->matchArr['matchType']==='strpos'){
+        } else if ($this->matchArr['matchType']===''){
             return '%'.$this->matchArr['value'].'%';
+        } else if ($this->matchArr['matchType']==='strpos' || $this->matchArr['matchType']==='stripos'){
+            $strlen=mb_strlen($this->matchArr['value']);
+            $substrLen=intval(0.3*$strlen);
+            $startPos=intval(($strlen-$substrLen)/2);
+            return '%'.mb_substr($this->matchArr['value'],$startPos,$substrLen).'%';
         } else if ($this->matchArr['matchType']==='patent'){
             return '%'.$this->patentNeedle($this->matchArr['value']).'%';
         } else {
