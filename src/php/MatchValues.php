@@ -216,7 +216,6 @@ final class MatchValues{
             $numberMatch=0;
             $ccAmatch=0;
         }
-        var_dump($ccA.' == '.$ccB.' | '.$numberA.' == '.$numberB);
         return $ccAmatch*$numberMatch;
     }
 

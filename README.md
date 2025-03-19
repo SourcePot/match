@@ -50,6 +50,8 @@ var_dump($result);
 
 ## Contains / Contains (ci)
 
+`(ci)` is the case insensitive match type.
+
 | Test value  | Heystack value | Result |
 | ------------- | ------------- | ------------- |
 | 100095646\chä6477/测试,用例(Hallo)Test | 100095646\chä6477/测试,用例(Hallo)Test | 1 |
@@ -57,6 +59,8 @@ var_dump($result);
 | 100095646\chä6477/测试,用例 | 100095646\chä6477/测试,用例(Hallo)Test | 1 |
 
 ## Does not contain / Does not contain (ci)
+
+`(ci)` is the case insensitive match type.
 
 | Test value  | Heystack value | Result |
 | ------------- | ------------- | ------------- |
@@ -129,6 +133,22 @@ Example: EP 2009 716 604.5 → Country code: `EP` and Naumber: `09716604`
 | EP2009516604 | EP 09 716 604.5 | %604% | 0 |
 
 ## UNYCOM case
+
+A weight is assigned to each of the components of the UNYCOM case number (year, file type, number, region, country and part). The weights are defined as constants in the `SourcePot\Match\UNYCOM` class and can be customised to your own requirements.
+
+| Test value  | Heystack value | Needle | Result |
+| ------------- | ------------- | ------------- | ------------- |
+| 2009P53143WECZ03 | 2009P53143WECZ03 | %53143% | 1 |
+| 2019P53143WECZ03 | 2009P53143WECZ03 | %53143% | 0.8 |
+| 2009XP53143WECZ03 | 2009P53143WECZ03 | %53143% | 0.9 |
+| 2009P52143WECZ03 | 2009P53143WECZ03 | %53143% | 0.6 |
+| 2009P53143EPCZ03 | 2009P53143WECZ03 | %53143% | 0.9 |
+| 2009P53143WEDE03 | 2009P53143WECZ03 | %53143% | 0.9 |
+| 2009P53143WECZ02 | 2009P53143WECZ03 | %53143% | 0.9 |
+| 2009P53143WECZ | 2009P53143WECZ03 | %53143% | 0.9 |
+| 2009P53143EP | 2009P53143WECZ03 | %53143% | 0.7 |
+| 2008P52143EP | 2009P53143WECZ03 | %53143% | 0.1 |
+| 2008F52143 | 2009P53143WECZ03 | %53143% | 0 |
 
 ## DateTime
 
