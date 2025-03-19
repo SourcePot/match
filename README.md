@@ -117,6 +117,9 @@ var_dump($result);
 | 145.434 | 1.454,34e-3 | 0.01 |
 
 ## String chunk match (middle chunk as needle)
+
+The following example uses strings whose sub-strings or components are separated by semicolons. Possible separators are defined by the regular expression `[\{\}\[\]\(\)\'";,|\/\\.\s]+`, which is defined as a constant.
+
 | haystack value  | to match value | needle | match |
 | ------------- | ------------- | ------------- | ------------- |
 | 2024-11-23;72661;ABCDEF | 2024-11-23;72661;ABCDEF | %72661% | 1 |
