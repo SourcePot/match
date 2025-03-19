@@ -1,8 +1,10 @@
+The PHP classes in this repository allow complex data values such as patent numbers, dates and times etc. to be matched. The first step is to load the data value to be compared with as well as the match type. After this the match is prepared. Depending on the match type, a needle is generated for database pre-filtering to create a haystack of data values from a database. In the third step the matches are performed between the initially laoded data value and the haystack values. Each match provides a match probability in the range 0...1, with 1 → complete match and 0 → no match.
+
 # Installation
 
-You can use Packagist to install the package on a web server or your lacal computer, e.g. *Command Prompt*, enter `composer create-project sourcepot/asset {add your target directory here}`. 
+You can use Packagist to install the package on a web server or your local computer, e.g. *Command Prompt*, enter `composer create-project sourcepot/asset {add your target directory here}`. 
 
-The following code examples require the namespace to be set to `namespace SourcePot\Asset;`.
+The following code examples require the namespace to be set to `namespace SourcePot\Match;`.
 
 ## Features
 - Simple and complex value matches, from simple string contain to UNYCOM cases
@@ -39,7 +41,7 @@ var_dump($result);
 # Match types
 
 > [!CAUTION]
-> The actual match values might depend on the version of this package and related packages.
+> The actual match result values might depend on the version of this package and related packages.
 
 ## Identical
 
