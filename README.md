@@ -49,10 +49,10 @@ var_dump($result);
 ?>
 ```
 
-# Match types
+# Match types, examples
 
 > [!CAUTION]
-> The actual match result values might depend on the version of this package and related packages.
+> The actual match result value might depend on the version of this package and related packages. The match strategie or weights might be adjusted over time.
 
 ## String chunk match
 
