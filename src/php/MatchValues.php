@@ -183,13 +183,41 @@ final class MatchValues{
         if ($ccA == $ccB){
             $ccAmatch=1;
         } else if ((empty($ccA) && !empty($ccB)) || (!empty($ccA) && empty($ccB))){
-            $ccAmatch=0.8;
+            $ccAmatch=0.9;
         } else {
             $ccAmatch=0;
         }
         // number match
-        $numberMatch=$this->correlation($numberA,$numberB,'correlationMatch');
-        return ($ccAmatch+$numberMatch)/2;
+        $strLenA=strlen($numberA);
+        $strLenB=strlen($numberB);
+        if ($strLenA-$strLenB===2){
+            if (strpos($numberA,$numberB)===FALSE){
+                $numberMatch=0;
+                $ccAmatch=0;
+            } else {
+                $numberMatch=1;
+            }
+        } else if ($strLenB-$strLenA===2){
+            if (strpos($numberB,$numberA)===FALSE){
+                $numberMatch=0;
+                $ccAmatch=0;
+            } else {
+                $numberMatch=1;
+            }
+        } else if ($strLenA===$strLenB){
+            if ($numberA===$numberB){
+                $numberMatch=1;
+            } else {
+                $numberMatch=0;
+                $ccAmatch=0;
+            }
+        } else {
+            // number length mismatch other than 2
+            $numberMatch=0;
+            $ccAmatch=0;
+        }
+        var_dump($ccA.' == '.$ccB.' | '.$numberA.' == '.$numberB);
+        return $ccAmatch*$numberMatch;
     }
 
     private function stringChunksMatch($stringA,$stringB):float|int

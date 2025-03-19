@@ -110,14 +110,23 @@ var_dump($result);
 
 ## Patent case
 
+For this match, the patent or application number is broken down into two components: Country code and property right number. A check digit is ignored and a possible year is accepted with 2 or 4 digits, e.g. 09 == 2009 == 1909 etc.
+
+Example: EP 2009 716 604.5 → Country code: `EP` and Naumber: `09716604` 
+
+
 | Test value  | Heystack value | Needle | Result |
 | ------------- | ------------- | ------------- | ------------- |
 | PCT/EP2009/055033 | PCT/EP2009/055033 | %033% | 1 |
-| PCT/EP09/055033 | PCT/EP2009/055033 | %033% | 0.9 |
-| 09733996 | 09733996.4 | %996% | 1 |
-| EP09733996 | 09733996.4 | %996% | 0.9 |
-| EP2291970 | EP2291970B1 | %970% | 1 |
-| EP3291910B1 | EP2291970B1 | %910% | 0.85714285714286 |
+| PCT/EP09/055033 | PCT/EP2009/055033 | %033% | 1 |
+| PCT/09/055033 | PCT/EP2009/055033 | %033% | 0 |
+| PCT/US09/055033 | PCT/EP2009/055033 | %033% | 0 |
+| PCT/EP2009/055043 | PCT/EP2009/055033 | %043% | 0 |
+| EP09716604.5 | EP 09 716 604.5 | %604% | 1 |
+| EP09716604 | EP 09 716 604.5 | %604% | 1 |
+| EP2009716604 | EP 09 716 604.5 | %604% | 1 |
+| EP209716604 | EP 09 716 604.5 | %604% | 0 |
+| EP2009516604 | EP 09 716 604.5 | %604% | 0 |
 
 ## UNYCOM case
 
