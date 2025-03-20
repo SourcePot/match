@@ -167,7 +167,7 @@ final class MatchValues{
     {
         preg_match('/[0-9\, \/]{3,}/',$string,$match);
         if (empty($match[0])){
-            return 'abcdefghijklmnopq';
+            return '##DUMMY_NO_MATCH_NEEDLE##';
         }
         $string=preg_replace('/[^0-9]+/','',$match[0]);
         return substr($string,-3);
