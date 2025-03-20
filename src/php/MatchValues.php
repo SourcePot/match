@@ -166,6 +166,9 @@ final class MatchValues{
     private function patentNeedle($string):string
     {
         preg_match('/[0-9\, \/]{3,}/',$string,$match);
+        if (empty($match[0])){
+            return 'abcdefghijklmnopq';
+        }
         $string=preg_replace('/[^0-9]+/','',$match[0]);
         return substr($string,-3);
     }
@@ -177,12 +180,14 @@ final class MatchValues{
         $matchesA=array_pop($matchesA);
         $ccA=array_pop($matchesA)??'';
         preg_match('/[0-9\, \/]{3,}/',$stringA,$matchA);
+        if (empty($matchA[0])){return 0;}
         $numberA=preg_replace('/[^0-9]+/','',$matchA[0]);
         // extract string B components
         preg_match_all('/([A-Z]{2})[^A-Z]/',$stringB,$matchesB);
         $matchesB=array_pop($matchesB);
         $ccB=array_pop($matchesB)??'';
         preg_match('/[0-9\, \/]{3,}/',$stringB,$matchB);
+        if (empty($matchB[0])){return 0;}
         $numberB=preg_replace('/[^0-9]+/','',$matchB[0]);
         // country code match
         if ($ccA == $ccB){
