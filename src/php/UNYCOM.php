@@ -201,6 +201,7 @@ final class UNYCOM{
         $unycom['Reference']=$unycom['Year'].$unycom['Type'].$unycom['Number'].$unycom['Region'].$unycom['Country'].$unycom['Part'];
         $unycom['Reference without \s']=preg_replace('/\s+/','',$unycom['Reference']);
         $unycom['Full']=(empty($unycom['Prefix']))?$unycom['Reference']:($unycom['Prefix'].' - '.$unycom['Reference']);
+        $unycom['CC']=(empty(trim($unycom['Country'])))?$unycom['Region']:$unycom['Country'];
         $unycom['isValid']=TRUE;
         return $unycom;
     }
