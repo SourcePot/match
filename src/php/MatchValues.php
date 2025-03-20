@@ -85,7 +85,8 @@ final class MatchValues{
             $startPos=intval(($strlen-$substrLen)/2);
             return '%'.mb_substr($this->matchArr['value'],$startPos,$substrLen).'%';
         } else if ($this->matchArr['matchType']==='patent'){
-            return '%'.$this->patentNeedle($this->matchArr['value']).'%';
+            $patentArr=$this->normalizePatent($this->matchArr['value']);
+            return '%'.$patentArr['needle'].'%';
         } else {
             return '%';
         }
@@ -163,32 +164,41 @@ final class MatchValues{
         return $this->matchArr['match']??0;
     }
 
-    private function patentNeedle($string):string
+    private function normalizePatent($string):array
     {
-        preg_match('/[0-9\, \/]{3,}/',$string,$match);
-        if (empty($match[0])){
-            return '##DUMMY_NO_MATCH_NEEDLE##';
+        $patent=['ipRef'=>'','needle'=>'','checkDigit'=>FALSE];
+        $stringComps=preg_split('/[^A-Z0-9]+/',$string);
+        // remove check digit
+        $checkDigit=array_pop($stringComps);
+        if (strlen($checkDigit)===1){
+            $patent['checkDigit']=intval($checkDigit);
+        } else {
+            $stringComps[]=$checkDigit;
         }
-        $string=preg_replace('/[^0-9]+/','',$match[0]);
-        return substr($string,-3);
+        // get needle
+        $string=implode('',$stringComps);
+        $patent['needle']=substr($string,-3);
+        $patent['ipRef']=str_replace('PCT','WO',$string);
+        return $patent;
     }
 
     private function patentMatch($stringA,$stringB):float|int
     {
-        // extract string A components
-        preg_match_all('/([A-Z]{2})[^A-Z]/',$stringA,$matchesA);
-        $matchesA=array_pop($matchesA);
-        $ccA=array_pop($matchesA)??'';
-        preg_match('/[0-9\, \/]{3,}/',$stringA,$matchA);
-        if (empty($matchA[0])){return 0;}
-        $numberA=preg_replace('/[^0-9]+/','',$matchA[0]);
-        // extract string B components
-        preg_match_all('/([A-Z]{2})[^A-Z]/',$stringB,$matchesB);
-        $matchesB=array_pop($matchesB);
-        $ccB=array_pop($matchesB)??'';
-        preg_match('/[0-9\, \/]{3,}/',$stringB,$matchB);
-        if (empty($matchB[0])){return 0;}
-        $numberB=preg_replace('/[^0-9]+/','',$matchB[0]);
+        $patentArrA=$this->normalizePatent($stringA);
+        $patentArrB=$this->normalizePatent($stringB);
+        if (empty($patentArrA['ipRef']) || empty($patentArrB['ipRef'])){
+            return 0;
+        }
+        // get country code
+        preg_match_all('/[^0-9]+/',$patentArrA['ipRef'],$matches);
+        $ccA=$matches[0][0]??'';
+        preg_match_all('/[^0-9]+/',$patentArrB['ipRef'],$matches);
+        $ccB=$matches[0][0]??'';
+        // get number
+        preg_match_all('/[0-9]+/',$patentArrA['ipRef'],$matches);
+        $numberA=implode('',$matches[0]??[]);
+        preg_match_all('/[0-9]+/',$patentArrB['ipRef'],$matches);
+        $numberB=implode('',$matches[0]??[]);
         // country code match
         if ($ccA == $ccB){
             $ccAmatch=1;
