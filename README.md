@@ -111,14 +111,12 @@ A weight is assigned to each of the components of the UNYCOM case number (year, 
 > [!NOTE]  
 > The needle will be based on the database timezone. 
 
-If the date and the time match, the result will be 1. If the date does not match, the result will be 0. If the date matches but the time does not, the result will be <1 and >0.
-
 | haystack value  | to match value | needle | match |
 | ------------- | ------------- | ------------- | ------------- |
+| 2023-07-11 11.13am (Europe/London) | 2023-07-11 12:13Uhr (Europe/Berlin) | 2023-07-11% | 1 |
 | 2023-07-13 | July 13, 2023 | 2023-07-13% | 1 |
-| 2023-07-13 | July 13, 2023 2.00pm | 2023-07-13% | 0.91666666666667 |
+| 2023-07-13 | July 13, 2023 2.00pm | 2023-07-13% | 0 |
 | 2023-07-11 | July 13, 2023 2.00pm | 2023-07-11% | 0 |
-| 2023-07-11 12:00:00 (Europe/London) | 2023-07-11 1.00pm (Europe/Berlin) | 2023-07-11% | 1 |
 
 ## Identical
 
