@@ -68,7 +68,7 @@ The following example uses strings whose sub-strings or components are separated
 
 ## Patent case
 
-For this match, the patent or application number is broken down into two components: Country code and property right number. A check digit is ignored and a possible year is accepted with 2 or 4 digits, e.g. 09 == 2009 == 1909 etc.
+For this match, the patent or application number is broken down into two components: Country code and intellectual property right number. A check digit is ignored and a possible year as prefix is accepted with 2 or 4 digits, e.g. 09 == 2009 == 1909 etc.
 
 Example: EP **20**09 716 604 **.5** → Country code: `EP` and Number: `09716604` 
 
