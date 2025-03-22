@@ -62,8 +62,6 @@ final class DateTime{
         $timestampB=$this->dateTimeParser->get()->getTimestamp();
         if ($timestampA===$timestampB){
             return 1;
-        } else if (abs($timestampB-$timestampA)<86400){
-            return (86400-abs($timestampB-$timestampA))/86400;
         } else {
             return 0;
         }
