@@ -85,8 +85,14 @@ final class MatchValues{
             $startPos=intval(($strlen-$substrLen)/2);
             return '%'.mb_substr($this->matchArr['value'],$startPos,$substrLen).'%';
         } else if ($this->matchArr['matchType']==='patent'){
-            $patentArr=$this->normalizePatent($this->matchArr['value']);
-            return '%'.$patentArr['needle'].'%';
+            $this->matchArr['obj'] = new \SourcePot\Match\Patent();
+            $this->matchArr['obj']->set($this->matchArr['value']);
+            $patentArr=$this->matchArr['obj']->get();
+            if (empty($patentArr['needle'])){
+                return '!INVALID_NEEDLE!';
+            } else {
+                return '%'.$patentArr['needle'].'%';
+            }
         } else {
             return '%';
         }
@@ -147,7 +153,11 @@ final class MatchValues{
         } else if ($this->matchArr['matchType']==='stringChunks'){
             $this->matchArr['match']=$this->stringChunksMatch($this->matchArr['value'],$toMatchValue);
         } else if ($this->matchArr['matchType']==='patent'){
-            $this->matchArr['match']=$this->patentMatch($this->matchArr['value'],$toMatchValue);
+            if ($this->matchArr['obj']->isValid()){
+                $this->matchArr['match']=$this->matchArr['obj']->match($toMatchValue);
+            } else {
+                $this->matchArr['match']=0;
+            }
         } else if ($this->matchArr['matchType']==='unycom'){
             if ($this->matchArr['obj']->isValid()){
                 $this->matchArr['match']=$this->matchArr['obj']->match($toMatchValue);
@@ -162,81 +172,6 @@ final class MatchValues{
             }
         }
         return $this->matchArr['match']??0;
-    }
-
-    private function normalizePatent($string):array
-    {
-        $patent=['ipRef'=>'','needle'=>'','checkDigit'=>FALSE];
-        $stringComps=preg_split('/[^A-Z0-9]+/',$string);
-        // remove check digit
-        $checkDigit=array_pop($stringComps);
-        if (strlen($checkDigit)===1){
-            $patent['checkDigit']=intval($checkDigit);
-        } else {
-            $stringComps[]=$checkDigit;
-        }
-        // get needle
-        $string=implode('',$stringComps);
-        $patent['needle']=substr($string,-3);
-        $patent['ipRef']=str_replace('PCT','WO',$string);
-        return $patent;
-    }
-
-    private function patentMatch($stringA,$stringB):float|int
-    {
-        $patentArrA=$this->normalizePatent($stringA);
-        $patentArrB=$this->normalizePatent($stringB);
-        if (empty($patentArrA['ipRef']) || empty($patentArrB['ipRef'])){
-            return 0;
-        }
-        // get country code
-        preg_match_all('/[^0-9]+/',$patentArrA['ipRef'],$matches);
-        $ccA=$matches[0][0]??'';
-        preg_match_all('/[^0-9]+/',$patentArrB['ipRef'],$matches);
-        $ccB=$matches[0][0]??'';
-        // get number
-        preg_match_all('/[0-9]+/',$patentArrA['ipRef'],$matches);
-        $numberA=implode('',$matches[0]??[]);
-        preg_match_all('/[0-9]+/',$patentArrB['ipRef'],$matches);
-        $numberB=implode('',$matches[0]??[]);
-        // country code match
-        if ($ccA == $ccB){
-            $ccAmatch=1;
-        } else if ((empty($ccA) && !empty($ccB)) || (!empty($ccA) && empty($ccB))){
-            $ccAmatch=0.9;
-        } else {
-            $ccAmatch=0;
-        }
-        // number match
-        $strLenA=strlen($numberA);
-        $strLenB=strlen($numberB);
-        if ($strLenA-$strLenB===2){
-            if (strpos($numberA,$numberB)===FALSE){
-                $numberMatch=0;
-                $ccAmatch=0;
-            } else {
-                $numberMatch=1;
-            }
-        } else if ($strLenB-$strLenA===2){
-            if (strpos($numberB,$numberA)===FALSE){
-                $numberMatch=0;
-                $ccAmatch=0;
-            } else {
-                $numberMatch=1;
-            }
-        } else if ($strLenA===$strLenB){
-            if ($numberA===$numberB){
-                $numberMatch=1;
-            } else {
-                $numberMatch=0;
-                $ccAmatch=0;
-            }
-        } else {
-            // number length mismatch other than 2
-            $numberMatch=0;
-            $ccAmatch=0;
-        }
-        return $ccAmatch*$numberMatch;
     }
 
     private function stringChunksMatch($stringA,$stringB):float|int
