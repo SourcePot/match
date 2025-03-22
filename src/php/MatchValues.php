@@ -240,6 +240,5 @@ final class MatchValues{
         return $topLikeness/(($matchType==='correlationMatch')?count($chrsA):count($chrsB));
     }
     
-
 }
 ?>

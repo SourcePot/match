@@ -44,15 +44,21 @@ $helperObj = new Helper();
 if ($matchtype=='unycom'){
     $unycomObj = new UNYCOM();
     $unycomObj->set($valueA);  
-    $html.=$helperObj->value2html($unycomObj->get(),'UNYCOM value A');
+    $html.=$helperObj->value2html($unycomObj->get(),'UNYCOM to match with value');
     $unycomObj->set($valueB);  
-    $html.=$helperObj->value2html($unycomObj->get(),'UNYCOM value B');
+    $html.=$helperObj->value2html($unycomObj->get(),'UNYCOM match value');
 } else if ($matchtype=='dateTime'){
     $dateTimeObj = new DateTime();
     $dateTimeObj->set($valueA);  
-    $html.=$helperObj->value2html($dateTimeObj->__toString(),'DateTime value A');
+    $html.=$helperObj->value2html($dateTimeObj->__toString(),'DateTime to match with value');
     $dateTimeObj->set($valueB);  
-    $html.=$helperObj->value2html($dateTimeObj->__toString(),'DateTime value B');
+    $html.=$helperObj->value2html($dateTimeObj->__toString(),'DateTime match value');
+} else if ($matchtype=='patent'){
+    $patentObj = new Patent();
+    $patentObj->set($valueA);  
+    $html.=$helperObj->value2html($patentObj->get(),'Patent to match with value');
+    $patentObj->set($valueB);  
+    $html.=$helperObj->value2html($patentObj->get(),'Patent match value');
 }
 
 $matchObj->set($valueA,$matchtype);
