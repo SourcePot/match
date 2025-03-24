@@ -67,7 +67,6 @@ final class Patent{
         $value=trim($value);
         // special cases: ".N-NNNN" EP check digit and examination department
         preg_match('/\.([0-9])[\-\—]([0-9]{4})/',$value,$match);
-        var_dump($match);
         if (!empty($match[0])){
             $patent['checkDigit']=intval($match[1]);
             $patent['department']=intval($match[2]);
