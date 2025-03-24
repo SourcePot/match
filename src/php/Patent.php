@@ -65,19 +65,28 @@ final class Patent{
             $value=str_replace($match[1],'',$value);
         }
         $value=trim($value);
-        // get/remove possible check digit
-        $stringComps=preg_split('/[^A-Z0-9]+/',$value);
-        $checkDigit=array_pop($stringComps);
-        if (is_numeric($checkDigit) && strlen($checkDigit)===1){
-            // check digit detected
-            $patent['checkDigit']=intval($checkDigit);
+        // special cases: ".N-NNNN" EP check digit and examination department
+        preg_match('/\.([0-9])[\-\—]([0-9]{4})/',$value,$match);
+        var_dump($match);
+        if (!empty($match[0])){
+            $patent['checkDigit']=intval($match[1]);
+            $patent['department']=intval($match[2]);
+            $value=str_replace($match[0],'',$value);
         } else {
-            $stringComps[]=$checkDigit;
+            // get/remove possible check digit
+            $stringComps=preg_split('/[^A-Z0-9]+/',$value);
+            $checkDigit=array_pop($stringComps);
+            if (is_numeric($checkDigit) && strlen($checkDigit)===1){
+                // check digit detected
+                $patent['checkDigit']=intval($checkDigit);
+            } else {
+                $stringComps[]=$checkDigit;
+            }
+            // get needle
+            $value=implode('',$stringComps);
         }
-        // get needle
-        $string=implode('',$stringComps);
-        $patent['needle']=substr($string,-3);
-        $patent['ipRef']=str_replace('PCT','WO',$string);
+        $patent['needle']=substr($value,-3);
+        $patent['ipRef']=str_replace('PCT','WO',$value);
         if (empty($patent['ipRef'])){
             $patent['isValid']=FALSE;
             return $patent;
