@@ -59,7 +59,7 @@ final class Patent{
         $patent=self::PATENT_TEMPLATE;
         $patent['raw']=$value;
         // get a publication suffix
-        preg_match('/[0-9 ]([A-Z][0-9]{0,1})/',$value,$match);
+        preg_match('/[0-9 ]([A-Z][0-9]{0,1}([^A-Z]|$))/',$value,$match);
         $patent['publicationType']=$match[1]??'';
         if (isset($match[1])){
             $value=str_replace($match[1],'',$value);
@@ -92,10 +92,11 @@ final class Patent{
         }
         // get country code
         preg_match_all('/[^0-9]+/',$patent['ipRef'],$matches);
-        $patent['cc']=$matches[0][0]??'';
+        $patent['cc']=substr($matches[0][0]??'',0,2);
         // get number
         preg_match_all('/[0-9]+/',$patent['ipRef'],$matches);
         $patent['number']=implode('',$matches[0]??[]);
+        $patent['ipRef']=$patent['cc'].$patent['number'];
         $patent['isValid']=TRUE;
         return $patent;
     }
@@ -111,7 +112,7 @@ final class Patent{
         } else if ((empty($patentA['cc']) && !empty($patentB['cc'])) || (!empty($patentA['cc']) && empty($patentB['cc']))){
             $ccMatch=0.9;
         } else {
-            $ccMatch=0;
+            $ccMatch=0.5;
         }
         // number match
         $strLenA=strlen($patentA['number']);
