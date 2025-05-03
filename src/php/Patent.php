@@ -59,10 +59,10 @@ final class Patent{
         $patent=self::PATENT_TEMPLATE;
         $patent['raw']=$value;
         // get a publication suffix
-        preg_match('/[0-9 ]([A-Z][0-9]{0,1}([^A-Z]|$))/',$value,$match);
-        $patent['publicationType']=$match[1]??'';
-        if (isset($match[1])){
-            $value=str_replace($match[1],'',$value);
+        preg_match('/[0-9]([ \-]{0,1})([A-Z][0-9]{0,1})([^A-Z]|$)/',$value,$match);
+        $patent['publicationType']=$match[2]??'';
+        if (isset($match[0])){
+            $value=str_replace($match[1].$match[2].$match[3],'',$value);
         }
         $value=trim($value);
         // special cases: ".N-NNNN" EP check digit and examination department
@@ -95,7 +95,7 @@ final class Patent{
         $patent['cc']=substr($matches[0][0]??'',0,2);
         // get number
         preg_match_all('/[0-9]+/',$patent['ipRef'],$matches);
-        $patent['number']=implode('',$matches[0]??[]);
+        $patent['number']=ltrim(implode('',$matches[0]??[]),"0");
         $patent['ipRef']=$patent['cc'].$patent['number'];
         $patent['isValid']=TRUE;
         return $patent;
@@ -118,18 +118,18 @@ final class Patent{
         $strLenA=strlen($patentA['number']);
         $strLenB=strlen($patentB['number']);
         if ($strLenA-$strLenB===2){
-            if (strpos($patentA['number'],$patentB['number'])===FALSE){
+            if (strpos($patentA['number'],$patentB['number'])===2){
+                $numberMatch=1;
+            } else {
                 $numberMatch=0;
                 $ccMatch=0;
-            } else {
-                $numberMatch=1;
             }
         } else if ($strLenB-$strLenA===2){
-            if (strpos($patentB['number'],$patentA['number'])===FALSE){
+            if (strpos($patentB['number'],$patentA['number'])===2){
+                $numberMatch=1;
+            } else {
                 $numberMatch=0;
                 $ccMatch=0;
-            } else {
-                $numberMatch=1;
             }
         } else if ($strLenA===$strLenB){
             if ($patentA['number']===$patentB['number']){
