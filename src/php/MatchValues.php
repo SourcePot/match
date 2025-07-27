@@ -16,7 +16,21 @@ final class MatchValues{
 
     private $matchArr=NULL;
 
-    private const MATCH_TYPES=[''=>'Identical','strpos'=>'Contains','!strpos'=>'Does not contain','stripos'=>'Contains (ci)','!stripos'=>'Does not contain (ci)','correlationContains'=>'Correlation contains','correlationMatch'=>'Correlation match','matchInt'=>'Integer match','matchFloat'=>'Float match','stringChunks'=>'String chunk match (middle chunk as needle)','patent'=>'Patent case','unycom'=>'UNYCOM case','dateTime'=>'DateTime'];
+    private const MATCH_TYPES=[
+        ''=>'Identical',
+        'strpos'=>'Contains',
+        '!strpos'=>'Does not contain',
+        'stripos'=>'Contains (ci)',
+        '!stripos'=>'Does not contain (ci)',
+        'correlationContains'=>'Correlation contains',
+        'correlationMatch'=>'Correlation match',
+        'matchInt'=>'Integer match',
+        'matchFloat'=>'Float match',
+        'stringChunks'=>'String chunk match (middle chunk as needle)',
+        'patent'=>'Patent case',
+        'unycom'=>'UNYCOM case',
+        'dateTime'=>'DateTime'
+    ];
     private const STRING_CHUNK_SEPARATOR_REGEX='/[\{\}\[\]\(\)\'";,|\/\\.\s]+/';
     private const DB_TIMEZONE='UTC';
 
@@ -176,20 +190,25 @@ final class MatchValues{
 
     private function stringChunksMatch($stringA,$stringB):float|int
     {
-        if (mb_strlen($stringA)>mb_strlen($stringB)){
-            $testString=$stringB;
-            $chunks=preg_split(self::STRING_CHUNK_SEPARATOR_REGEX,$stringA);
-        } else {
-            $testString=$stringA;
-            $chunks=preg_split(self::STRING_CHUNK_SEPARATOR_REGEX,$stringB);
+        $chunksA=preg_split(self::STRING_CHUNK_SEPARATOR_REGEX,$stringA);
+        $chunksB=preg_split(self::STRING_CHUNK_SEPARATOR_REGEX,$stringB);
+        // ensure $chunksA has more elements than $chunksB
+        if (count($chunksA)<count($chunksB)){
+            $tmp=$chunksB;
+            $chunksB=$chunksA;
+            $chunksA=$tmp;
         }
-        $matchCount=$count=0;
-        foreach($chunks as $chunk){
-            if (empty($chunk)){continue;}
-            if (mb_strpos($testString,$chunk)===FALSE){$matchCount++;}
-            $count++;
+        $match=0;
+        $matchMax=0;
+        $currentWeight=64;
+        foreach($chunksA as $chunkIndex=>$chunkA){
+            if ($chunkA===$chunksB[$chunkIndex]??''){
+                $match+=$currentWeight;
+            }
+            $matchMax+=$currentWeight;
+            $currentWeight=intval($currentWeight/2);
         }
-        return 1-$matchCount/$count;
+        return round($match/$matchMax,2);
     }
 
     private function numberMatch($valA,$valB,$type='matchInt'):float|int
@@ -207,7 +226,7 @@ final class MatchValues{
             $valB=intval(round($valB));
         }
         $match=(($valA>$valB)?$valB:$valA)/(($valA>$valB)?$valA:$valB);
-        return ($match<0)?0:$match;
+        return round(($match<0)?0:$match,2);
     }
 
     private function correlation($stringA,$stringB,$matchType):float|int
@@ -237,7 +256,7 @@ final class MatchValues{
                 $topLikeness=$correlation;
             }
         }
-        return $topLikeness/(($matchType==='correlationMatch')?count($chrsA):count($chrsB));
+        return round($topLikeness/(($matchType==='correlationMatch')?count($chrsA):count($chrsB)),2);
     }
     
 }
