@@ -89,8 +89,7 @@ final class MatchValues{
             return $dateTimeObj->format('Y-m-d').'%';
         } else if ($this->matchArr['matchType']==='stringChunks'){
             $chunks=preg_split(self::STRING_CHUNK_SEPARATOR_REGEX,$this->matchArr['value']);
-            $chunkIndex=intdiv(count($chunks),2);
-            return '%'.$chunks[$chunkIndex].'%';
+            return '%'.$chunks[1].'%';
         } else if ($this->matchArr['matchType']===''){
             return '%'.$this->matchArr['value'].'%';
         } else if ($this->matchArr['matchType']==='strpos' || $this->matchArr['matchType']==='stripos'){
