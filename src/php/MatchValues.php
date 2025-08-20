@@ -16,7 +16,7 @@ final class MatchValues{
 
     private $matchArr=NULL;
 
-    private const MATCH_TYPES=[
+    public const MATCH_TYPES=[
         ''=>'Identical',
         'strpos'=>'Contains',
         '!strpos'=>'Does not contain',
@@ -26,12 +26,12 @@ final class MatchValues{
         'correlationMatch'=>'Correlation match',
         'matchInt'=>'Integer match',
         'matchFloat'=>'Float match',
-        'stringChunks'=>'String chunk match (middle chunk as needle)',
+        'stringChunks'=>'String chunk match (2nd chunk as needle)',
         'patent'=>'Patent case',
         'unycom'=>'UNYCOM case',
         'dateTime'=>'DateTime'
     ];
-    private const STRING_CHUNK_SEPARATOR_REGEX='/[\{\}\[\]\(\)\'";,|\/\\.\s]+/';
+    public const STRING_CHUNK_SEPARATOR_REGEX='/[\{\}\[\]\(\)\'";,|\/\\.\s]+/';
     private const DB_TIMEZONE='UTC';
 
     function __construct()
