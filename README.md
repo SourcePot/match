@@ -56,14 +56,14 @@ var_dump($result);
 
 ## String chunk match
 
-The following example uses strings whose sub-strings or components are separated by semicolons. Possible separators are defined by the regular expression `[\{\}\[\]\(\)\'";,|\/\\.\s]+`, which is defined as a constant. The middle sub-string is used as needle.
+The following example uses strings whose sub-strings or components are separated by semicolons. Possible separators are defined by the regular expression `[\{\}\[\]\(\)\'";,|\/\\.\s]+`, which is defined as a constant. The 2nd sub-string is used as needle, the weight nearly halfs from chunk to chunk, i.e. the 1st chunk weight=50%, the 2nd 25%,....
 
 | haystack value  | to match value | needle | match |
 | ------------- | ------------- | ------------- | ------------- |
 | 2024-11-23;72661;ABCDEF | 2024-11-23;72661;ABCDEF | %72661% | 1 |
-| 2024-11-22;72661;ABCDEF | 2024-11-23;72661;ABCDEF | %72661% | 0.66666666666667 |
-| 2024-11-23;72660;ABCDEF | 2024-11-23;72661;ABCDEF | %72660% | 0.66666666666667 |
-| 2024-11-22;72661;ABCDEF | 2024-11-23;72661;ABCDEF | %72660% | 0.33333333333333 |
+| 2024-11-22;72661;ABCDEF | 2024-11-23;72661;ABCDEF | %72661% | 0.43 |
+| 2024-11-23;72660;ABCDEF | 2024-11-23;72661;ABCDEF | %72660% | 0.71 |
+| 2024-11-22;72661;ABCDEF | 2024-11-23;72661;ABCDEF | %72660% | 0.43 |
 | 2024-11-22;72660;ABCdEF | 2024-11-23;72661;ABCDEF | %72660% | 0 |
 
 ## Patent case
