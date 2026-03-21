@@ -426,11 +426,16 @@ final class UNYCOM{
         }
         $unycom['Family']=$unycom['Year'].'F'.$unycom['Number'];
         $unycom['Reference']=$unycom['Year'].$unycom['Type'].$unycom['Number'].$unycom['Region'].$unycom['Country'].$unycom['Part'];
+        $unycom['Reference family detection']=$unycom['Reference'];
         $unycom['Reference without \s']=preg_replace('/\s+/','',$unycom['Reference']);
         $unycom['Full']=(empty($unycom['Prefix']))?$unycom['Reference']:($unycom['Prefix'].' - '.$unycom['Reference']);
         $unycom['CC']=(empty(trim($unycom['Country'])))?$unycom['Region']:$unycom['Country'];
         $unycom['CC']=str_replace('WE','EP',$unycom['CC']);
         $unycom['isValid']=TRUE;
+        if (empty(trim($unycom['Region'])) && empty(trim($unycom['Country']))){
+            $type=trim($unycom['Type'],'PF').'F';
+            $unycom['Reference family detection']=$unycom['Year'].$type.$unycom['Number'];
+        }
         return $unycom;
     }
 
